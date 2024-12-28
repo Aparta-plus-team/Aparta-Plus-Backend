@@ -1,6 +1,11 @@
+using data_aparta_.Context;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddGraphQL().AddTypes();
+builder.Services
+    .SetupEntityFrameworkCore(builder.Configuration)
+    .SetupGraphQL();
 
 var app = builder.Build();
 
