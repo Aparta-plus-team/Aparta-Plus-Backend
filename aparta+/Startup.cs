@@ -1,5 +1,14 @@
 ﻿using data_aparta_.Context;
 using Microsoft.EntityFrameworkCore;
+using Amazon.CognitoIdentityProvider;
+using Amazon.Extensions.CognitoAuthentication;
+using data_aparta_.Repos.Contracts;
+using data_aparta_.Repos.Auth;
+using Amazon.Runtime;
+using Amazon;
+using data_aparta_.Repos.Propiedades;
+using Amazon.S3;
+using data_aparta_.Repos.Utils;
 
 namespace aparta_
 {
@@ -22,7 +31,8 @@ namespace aparta_
                 .AddTypes()
                 .AddFiltering()
                 .AddSorting()
-                .AddProjections();
+                .AddProjections()
+                .AddType<UploadType>();
 
             return services;
         }
@@ -47,6 +57,44 @@ namespace aparta_
                            .AllowAnyHeader();
                 });
             });
+
+            return services;
+        }
+
+
+        public static IServiceCollection ConfugureAWS(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<AmazonCognitoIdentityProviderClient>(provider =>
+            {
+                var configuration = provider.GetRequiredService<IConfiguration>();
+                var awsCredentials = new BasicAWSCredentials(
+                    configuration["AWS:AccessKey"],
+                    configuration["AWS:SecretKey"]
+                );
+
+                return new AmazonCognitoIdentityProviderClient(
+                    awsCredentials,
+                    RegionEndpoint.GetBySystemName(configuration["AWS:Region"])
+                );
+            });
+
+            services.AddSingleton<IAmazonS3>(provider =>
+            {
+                var awsCredentials = new BasicAWSCredentials(
+                    configuration["AWS:AccessKey"],
+                    configuration["AWS:SecretKey"]
+                );
+
+                return new AmazonS3Client(
+                    awsCredentials,
+                    RegionEndpoint.GetBySystemName(configuration["AWS:Region"])
+                );
+            });
+
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPropertyRepository, PropertyRepository>();
+            services.AddScoped<S3Uploader>();
 
             return services;
         }

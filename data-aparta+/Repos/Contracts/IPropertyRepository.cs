@@ -1,0 +1,21 @@
+﻿using Amazon.Util.Internal;
+using data_aparta_.DTOs;
+using data_aparta_.Models;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace data_aparta_.Repos.Contracts
+{
+    public interface IPropertyRepository
+    {
+        Task<Propiedad> CreateAsync(CreatePropertyInput input);
+        Task<FileUploadResponse> UploadPortrait (FileUploadInput input);
+        Task<Propiedad?> UpdateAsync(string id, Propiedad propiedad);
+        Task<bool> DeleteAsync(string id);
+
+    }
+}

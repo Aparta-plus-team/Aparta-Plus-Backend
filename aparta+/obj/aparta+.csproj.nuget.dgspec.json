@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sebra\\source\\repos\\Aparta-plus-team\\Aparta-Plus-Backend\\aparta+\\aparta+.csproj": {}
+    "C:\\Users\\Erick\\source\\repos\\Aparta-Plus-Backend\\aparta+\\aparta+.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sebra\\source\\repos\\Aparta-plus-team\\Aparta-Plus-Backend\\aparta+\\aparta+.csproj": {
+    "C:\\Users\\Erick\\source\\repos\\Aparta-Plus-Backend\\aparta+\\aparta+.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sebra\\source\\repos\\Aparta-plus-team\\Aparta-Plus-Backend\\aparta+\\aparta+.csproj",
+        "projectUniqueName": "C:\\Users\\Erick\\source\\repos\\Aparta-Plus-Backend\\aparta+\\aparta+.csproj",
         "projectName": "aparta+",
-        "projectPath": "C:\\Users\\sebra\\source\\repos\\Aparta-plus-team\\Aparta-Plus-Backend\\aparta+\\aparta+.csproj",
-        "packagesPath": "C:\\Users\\sebra\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sebra\\source\\repos\\Aparta-plus-team\\Aparta-Plus-Backend\\aparta+\\obj\\",
+        "projectPath": "C:\\Users\\Erick\\source\\repos\\Aparta-Plus-Backend\\aparta+\\aparta+.csproj",
+        "packagesPath": "C:\\Users\\Erick\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Erick\\source\\repos\\Aparta-Plus-Backend\\aparta+\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\sebra\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Erick\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,15 +26,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\sebra\\source\\repos\\Aparta-plus-team\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj": {
-                "projectPath": "C:\\Users\\sebra\\source\\repos\\Aparta-plus-team\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj"
+              "C:\\Users\\Erick\\source\\repos\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj": {
+                "projectPath": "C:\\Users\\Erick\\source\\repos\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj"
               }
             }
           }
@@ -107,20 +106,20 @@
         }
       }
     },
-    "C:\\Users\\sebra\\source\\repos\\Aparta-plus-team\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj": {
+    "C:\\Users\\Erick\\source\\repos\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sebra\\source\\repos\\Aparta-plus-team\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj",
+        "projectUniqueName": "C:\\Users\\Erick\\source\\repos\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj",
         "projectName": "data-aparta+",
-        "projectPath": "C:\\Users\\sebra\\source\\repos\\Aparta-plus-team\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj",
-        "packagesPath": "C:\\Users\\sebra\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sebra\\source\\repos\\Aparta-plus-team\\Aparta-Plus-Backend\\data-aparta+\\obj\\",
+        "projectPath": "C:\\Users\\Erick\\source\\repos\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj",
+        "packagesPath": "C:\\Users\\Erick\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Erick\\source\\repos\\Aparta-Plus-Backend\\data-aparta+\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\sebra\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Erick\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -129,7 +128,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -148,6 +146,22 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "AWSSDK.CognitoIdentityProvider": {
+              "target": "Package",
+              "version": "[3.7.405.10, )"
+            },
+            "AWSSDK.S3": {
+              "target": "Package",
+              "version": "[3.7.410.12, )"
+            },
+            "Amazon.Extensions.CognitoAuthentication": {
+              "target": "Package",
+              "version": "[2.5.5, )"
+            },
+            "HotChocolate.AspNetCore": {
+              "target": "Package",
+              "version": "[14.3.0, )"
+            },
             "HotChocolate.Data": {
               "target": "Package",
               "version": "[14.3.0, )"
@@ -155,6 +169,14 @@
             "HotChocolate.Data.EntityFramework": {
               "target": "Package",
               "version": "[14.3.0, )"
+            },
+            "HotChocolate.Types": {
+              "target": "Package",
+              "version": "[14.3.0, )"
+            },
+            "Microsoft.AspNetCore.Http.Features": {
+              "target": "Package",
+              "version": "[5.0.17, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",

@@ -21,6 +21,71 @@
           "aparta+.dll": {}
         }
       },
+      "Amazon.Extensions.CognitoAuthentication/2.5.5": {
+        "dependencies": {
+          "AWSSDK.CognitoIdentity": "3.7.300.74",
+          "AWSSDK.CognitoIdentityProvider": "3.7.405.10"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Amazon.Extensions.CognitoAuthentication.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "2.5.3.0"
+          }
+        }
+      },
+      "AWSSDK.CognitoIdentity/3.7.300.74": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.400.70",
+          "AWSSDK.SecurityToken": "3.7.300.75"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.CognitoIdentity.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.300.74"
+          }
+        }
+      },
+      "AWSSDK.CognitoIdentityProvider/3.7.405.10": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.400.70"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.CognitoIdentityProvider.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.405.10"
+          }
+        }
+      },
+      "AWSSDK.Core/3.7.400.70": {
+        "runtime": {
+          "lib/net8.0/AWSSDK.Core.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.400.70"
+          }
+        }
+      },
+      "AWSSDK.S3/3.7.410.12": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.400.70"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.S3.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.410.12"
+          }
+        }
+      },
+      "AWSSDK.SecurityToken/3.7.300.75": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.400.70"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.SecurityToken.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.300.75"
+          }
+        }
+      },
       "ChilliCream.Nitro.App/20.0.2": {
         "dependencies": {
           "Yarp.ReverseProxy": "2.2.0"
@@ -509,6 +574,12 @@
             "assemblyVersion": "2.14.0.0",
             "fileVersion": "2.14.1.48190"
           }
+        }
+      },
+      "Microsoft.AspNetCore.Http.Features/5.0.17": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "9.0.0",
+          "System.IO.Pipelines": "9.0.0"
         }
       },
       "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
@@ -1211,8 +1282,14 @@
       },
       "data-aparta+/1.0.0": {
         "dependencies": {
+          "AWSSDK.CognitoIdentityProvider": "3.7.405.10",
+          "AWSSDK.S3": "3.7.410.12",
+          "Amazon.Extensions.CognitoAuthentication": "2.5.5",
+          "HotChocolate.AspNetCore": "14.3.0",
           "HotChocolate.Data": "14.3.0",
           "HotChocolate.Data.EntityFramework": "14.3.0",
+          "HotChocolate.Types": "14.3.0",
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.2"
         },
         "runtime": {
@@ -1226,6 +1303,48 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Amazon.Extensions.CognitoAuthentication/2.5.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IrXyYiVHsCl58MNVBgzSTArRjhs970Cm/8HE/Kq4r5iPaPhk8V1YJySFZahZPovmc+xCKTQPaeg0XXNuOzJRZg==",
+      "path": "amazon.extensions.cognitoauthentication/2.5.5",
+      "hashPath": "amazon.extensions.cognitoauthentication.2.5.5.nupkg.sha512"
+    },
+    "AWSSDK.CognitoIdentity/3.7.300.74": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2WjZrVJn7nm6rWZyDEXVgdyZVdTze4pfZjxdr0Q9gEi+7fCq40z//YQLAlwD44UlzVWpONdLvjcCuA39T5Q/QA==",
+      "path": "awssdk.cognitoidentity/3.7.300.74",
+      "hashPath": "awssdk.cognitoidentity.3.7.300.74.nupkg.sha512"
+    },
+    "AWSSDK.CognitoIdentityProvider/3.7.405.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-B7euc9FR7x+WuoMsWmr6aH5hxrHWdnEH8WBVuUGGRiBGWjjjPeSINEQeN58gf4f0QsdMmRP7hfP24UdBoPhnvw==",
+      "path": "awssdk.cognitoidentityprovider/3.7.405.10",
+      "hashPath": "awssdk.cognitoidentityprovider.3.7.405.10.nupkg.sha512"
+    },
+    "AWSSDK.Core/3.7.400.70": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-S0mcK1Bqa8xVh9UU+Rg9VEdjHfD2B75WRtBmh4ANTelUcTThG7T/ujNjxLXhzZQKW2j1V+KHUEViW4+OLB4Vkg==",
+      "path": "awssdk.core/3.7.400.70",
+      "hashPath": "awssdk.core.3.7.400.70.nupkg.sha512"
+    },
+    "AWSSDK.S3/3.7.410.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZTMqFLboGilRNnKdSM7+0Jz4GGjE6dlZcQhOHXedMrudXHrFL/8Rlf0cOvsZaHKc5ljVxzauW6gm2Yezqfk8cw==",
+      "path": "awssdk.s3/3.7.410.12",
+      "hashPath": "awssdk.s3.3.7.410.12.nupkg.sha512"
+    },
+    "AWSSDK.SecurityToken/3.7.300.75": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Tr1rbOf9DrZTr3XWPDDnwBjigjKf/QLRIB2V4XGEqaBDYUHnRBuckG2sMNpsq/q9tHSvYvvFXCfIH7R0EpNJBg==",
+      "path": "awssdk.securitytoken/3.7.300.75",
+      "hashPath": "awssdk.securitytoken.3.7.300.75.nupkg.sha512"
     },
     "ChilliCream.Nitro.App/20.0.2": {
       "type": "package",
@@ -1513,6 +1632,13 @@
       "sha512": "sha512-lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Http.Features/5.0.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3jG2xS+dx8DDCGV/F+STdPTg89lX3ao3dF/VEPvJaz3wzBIjuadipTtYNEXDIVuOPZwb6jdmhrX9jkzOIBm5cw==",
+      "path": "microsoft.aspnetcore.http.features/5.0.17",
+      "hashPath": "microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512"
     },
     "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
       "type": "package",

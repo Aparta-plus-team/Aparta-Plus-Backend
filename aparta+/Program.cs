@@ -5,7 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .SetupEntityFrameworkCore(builder.Configuration)
-    .SetupGraphQL();
+    .SetupGraphQL()
+    .ConfugureAWS(builder.Configuration);
+
 
 var app = builder.Build();
 

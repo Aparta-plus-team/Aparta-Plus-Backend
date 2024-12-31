@@ -8,13 +8,95 @@
     ".NETCoreApp,Version=v8.0": {
       "data-aparta+/1.0.0": {
         "dependencies": {
+          "AWSSDK.CognitoIdentityProvider": "3.7.405.10",
+          "AWSSDK.S3": "3.7.410.12",
+          "Amazon.Extensions.CognitoAuthentication": "2.5.5",
+          "HotChocolate.AspNetCore": "14.3.0",
           "HotChocolate.Data": "14.3.0",
           "HotChocolate.Data.EntityFramework": "14.3.0",
+          "HotChocolate.Types": "14.3.0",
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
           "Microsoft.EntityFrameworkCore.Design": "9.0.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.2"
         },
         "runtime": {
           "data-aparta+.dll": {}
+        }
+      },
+      "Amazon.Extensions.CognitoAuthentication/2.5.5": {
+        "dependencies": {
+          "AWSSDK.CognitoIdentity": "3.7.300.74",
+          "AWSSDK.CognitoIdentityProvider": "3.7.405.10"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Amazon.Extensions.CognitoAuthentication.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "2.5.3.0"
+          }
+        }
+      },
+      "AWSSDK.CognitoIdentity/3.7.300.74": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.400.70",
+          "AWSSDK.SecurityToken": "3.7.300.75"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.CognitoIdentity.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.300.74"
+          }
+        }
+      },
+      "AWSSDK.CognitoIdentityProvider/3.7.405.10": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.400.70"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.CognitoIdentityProvider.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.405.10"
+          }
+        }
+      },
+      "AWSSDK.Core/3.7.400.70": {
+        "runtime": {
+          "lib/net8.0/AWSSDK.Core.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.400.70"
+          }
+        }
+      },
+      "AWSSDK.S3/3.7.410.12": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.400.70"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.S3.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.410.12"
+          }
+        }
+      },
+      "AWSSDK.SecurityToken/3.7.300.75": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.400.70"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.SecurityToken.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.300.75"
+          }
+        }
+      },
+      "ChilliCream.Nitro.App/20.0.2": {
+        "dependencies": {
+          "Yarp.ReverseProxy": "2.2.0"
+        },
+        "runtime": {
+          "lib/net8.0/ChilliCream.Nitro.App.dll": {
+            "assemblyVersion": "20.0.0.0",
+            "fileVersion": "20.0.2.0"
+          }
         }
       },
       "GreenDonut/14.3.0": {
@@ -56,6 +138,22 @@
         },
         "runtime": {
           "lib/net8.0/HotChocolate.Abstractions.dll": {
+            "assemblyVersion": "14.3.0.0",
+            "fileVersion": "14.3.0.0"
+          }
+        }
+      },
+      "HotChocolate.AspNetCore/14.3.0": {
+        "dependencies": {
+          "ChilliCream.Nitro.App": "20.0.2",
+          "HotChocolate": "14.3.0",
+          "HotChocolate.Subscriptions.InMemory": "14.3.0",
+          "HotChocolate.Transport.Sockets": "14.3.0",
+          "HotChocolate.Types.Scalars.Upload": "14.3.0",
+          "HotChocolate.Utilities.DependencyInjection": "14.3.0"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.AspNetCore.dll": {
             "assemblyVersion": "14.3.0.0",
             "fileVersion": "14.3.0.0"
           }
@@ -290,6 +388,42 @@
           }
         }
       },
+      "HotChocolate.Subscriptions/14.3.0": {
+        "dependencies": {
+          "HotChocolate.Abstractions": "14.3.0",
+          "HotChocolate.Execution.Abstractions": "14.3.0"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Subscriptions.dll": {
+            "assemblyVersion": "14.3.0.0",
+            "fileVersion": "14.3.0.0"
+          }
+        }
+      },
+      "HotChocolate.Subscriptions.InMemory/14.3.0": {
+        "dependencies": {
+          "HotChocolate.Execution.Abstractions": "14.3.0",
+          "HotChocolate.Subscriptions": "14.3.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Subscriptions.InMemory.dll": {
+            "assemblyVersion": "14.3.0.0",
+            "fileVersion": "14.3.0.0"
+          }
+        }
+      },
+      "HotChocolate.Transport.Sockets/14.3.0": {
+        "dependencies": {
+          "System.IO.Pipelines": "9.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Transport.Sockets.dll": {
+            "assemblyVersion": "14.3.0.0",
+            "fileVersion": "14.3.0.0"
+          }
+        }
+      },
       "HotChocolate.Types/14.3.0": {
         "dependencies": {
           "GreenDonut": "14.3.0",
@@ -366,6 +500,17 @@
           }
         }
       },
+      "HotChocolate.Types.Scalars.Upload/14.3.0": {
+        "dependencies": {
+          "HotChocolate.Types": "14.3.0"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Types.Scalars.Upload.dll": {
+            "assemblyVersion": "14.3.0.0",
+            "fileVersion": "14.3.0.0"
+          }
+        }
+      },
       "HotChocolate.Types.Shared/14.3.0": {
         "dependencies": {
           "HotChocolate.Language.SyntaxTree": "14.3.0"
@@ -418,6 +563,12 @@
             "assemblyVersion": "2.14.0.0",
             "fileVersion": "2.14.1.48190"
           }
+        }
+      },
+      "Microsoft.AspNetCore.Http.Features/5.0.17": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "9.0.0",
+          "System.IO.Pipelines": "9.0.0"
         }
       },
       "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
@@ -869,14 +1020,7 @@
           }
         }
       },
-      "Microsoft.Extensions.ObjectPool/8.0.0": {
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.ObjectPool.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53112"
-          }
-        }
-      },
+      "Microsoft.Extensions.ObjectPool/8.0.0": {},
       "Microsoft.Extensions.Options/9.0.0": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0",
@@ -1009,6 +1153,14 @@
           }
         }
       },
+      "System.IO.Hashing/8.0.0": {
+        "runtime": {
+          "lib/net8.0/System.IO.Hashing.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        }
+      },
       "System.IO.Pipelines/9.0.0": {
         "runtime": {
           "lib/net8.0/System.IO.Pipelines.dll": {
@@ -1051,7 +1203,18 @@
           }
         }
       },
-      "System.Threading.Channels/7.0.0": {}
+      "System.Threading.Channels/7.0.0": {},
+      "Yarp.ReverseProxy/2.2.0": {
+        "dependencies": {
+          "System.IO.Hashing": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/Yarp.ReverseProxy.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.200.24.42901"
+          }
+        }
+      }
     }
   },
   "libraries": {
@@ -1059,6 +1222,55 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Amazon.Extensions.CognitoAuthentication/2.5.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IrXyYiVHsCl58MNVBgzSTArRjhs970Cm/8HE/Kq4r5iPaPhk8V1YJySFZahZPovmc+xCKTQPaeg0XXNuOzJRZg==",
+      "path": "amazon.extensions.cognitoauthentication/2.5.5",
+      "hashPath": "amazon.extensions.cognitoauthentication.2.5.5.nupkg.sha512"
+    },
+    "AWSSDK.CognitoIdentity/3.7.300.74": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2WjZrVJn7nm6rWZyDEXVgdyZVdTze4pfZjxdr0Q9gEi+7fCq40z//YQLAlwD44UlzVWpONdLvjcCuA39T5Q/QA==",
+      "path": "awssdk.cognitoidentity/3.7.300.74",
+      "hashPath": "awssdk.cognitoidentity.3.7.300.74.nupkg.sha512"
+    },
+    "AWSSDK.CognitoIdentityProvider/3.7.405.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-B7euc9FR7x+WuoMsWmr6aH5hxrHWdnEH8WBVuUGGRiBGWjjjPeSINEQeN58gf4f0QsdMmRP7hfP24UdBoPhnvw==",
+      "path": "awssdk.cognitoidentityprovider/3.7.405.10",
+      "hashPath": "awssdk.cognitoidentityprovider.3.7.405.10.nupkg.sha512"
+    },
+    "AWSSDK.Core/3.7.400.70": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-S0mcK1Bqa8xVh9UU+Rg9VEdjHfD2B75WRtBmh4ANTelUcTThG7T/ujNjxLXhzZQKW2j1V+KHUEViW4+OLB4Vkg==",
+      "path": "awssdk.core/3.7.400.70",
+      "hashPath": "awssdk.core.3.7.400.70.nupkg.sha512"
+    },
+    "AWSSDK.S3/3.7.410.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZTMqFLboGilRNnKdSM7+0Jz4GGjE6dlZcQhOHXedMrudXHrFL/8Rlf0cOvsZaHKc5ljVxzauW6gm2Yezqfk8cw==",
+      "path": "awssdk.s3/3.7.410.12",
+      "hashPath": "awssdk.s3.3.7.410.12.nupkg.sha512"
+    },
+    "AWSSDK.SecurityToken/3.7.300.75": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Tr1rbOf9DrZTr3XWPDDnwBjigjKf/QLRIB2V4XGEqaBDYUHnRBuckG2sMNpsq/q9tHSvYvvFXCfIH7R0EpNJBg==",
+      "path": "awssdk.securitytoken/3.7.300.75",
+      "hashPath": "awssdk.securitytoken.3.7.300.75.nupkg.sha512"
+    },
+    "ChilliCream.Nitro.App/20.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lGGJr3KQzctFTyK+kr0DanKL2IFxFcGeR3lxwyxo4wxzmDpTYOe84HR2c/bD2rEJDdawke/NLWW+QC43TsM2EQ==",
+      "path": "chillicream.nitro.app/20.0.2",
+      "hashPath": "chillicream.nitro.app.20.0.2.nupkg.sha512"
     },
     "GreenDonut/14.3.0": {
       "type": "package",
@@ -1080,6 +1292,13 @@
       "sha512": "sha512-XeYgSPxaxicxWCn+V6jrYqXfVNUHT9CglHrTFBfrVe6YtE1jQowa24aosjLsqhAqy6A4TIM9o2VkJ8o5gR79qg==",
       "path": "hotchocolate.abstractions/14.3.0",
       "hashPath": "hotchocolate.abstractions.14.3.0.nupkg.sha512"
+    },
+    "HotChocolate.AspNetCore/14.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7oE4ozzJIV14i206TiMhgQ+OLaN47b+dCsSEkCwcHbMMW++qhyjSfDIZGs/upGPQ/MCFRqp8DRBu4D9yHQE1jQ==",
+      "path": "hotchocolate.aspnetcore/14.3.0",
+      "hashPath": "hotchocolate.aspnetcore.14.3.0.nupkg.sha512"
     },
     "HotChocolate.Authorization/14.3.0": {
       "type": "package",
@@ -1214,6 +1433,27 @@
       "path": "hotchocolate.primitives/14.3.0",
       "hashPath": "hotchocolate.primitives.14.3.0.nupkg.sha512"
     },
+    "HotChocolate.Subscriptions/14.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LfNmDeFop3q1QW7ZYSqcDIWt2/K09+Y8PgEtaoF8EV/9GTjs3L1r00NEkMLSZpv4SR4bKsG7QgCG85Wnurmp0g==",
+      "path": "hotchocolate.subscriptions/14.3.0",
+      "hashPath": "hotchocolate.subscriptions.14.3.0.nupkg.sha512"
+    },
+    "HotChocolate.Subscriptions.InMemory/14.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Yq7SaJCXuVxeYtHsAi7COWTjtExBGmRlbz4gwrXMtcpeN2DkVAaxAvq4hptEcg61V5btJxCVh5BsGNQgFTweCw==",
+      "path": "hotchocolate.subscriptions.inmemory/14.3.0",
+      "hashPath": "hotchocolate.subscriptions.inmemory.14.3.0.nupkg.sha512"
+    },
+    "HotChocolate.Transport.Sockets/14.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pnjztQeln4PXO3lF4QWrcPKKxy9p6/xfEa2npeXgxophTv85hxPTUZ1bVBEEqTnb5crLJPepNJLh/VeTcTpeVw==",
+      "path": "hotchocolate.transport.sockets/14.3.0",
+      "hashPath": "hotchocolate.transport.sockets.14.3.0.nupkg.sha512"
+    },
     "HotChocolate.Types/14.3.0": {
       "type": "package",
       "serviceable": true,
@@ -1256,6 +1496,13 @@
       "path": "hotchocolate.types.queries/14.3.0",
       "hashPath": "hotchocolate.types.queries.14.3.0.nupkg.sha512"
     },
+    "HotChocolate.Types.Scalars.Upload/14.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-p9tK3+70fOWctLAL9PipdmmgJzZGn2reDe666HupH0iAbYYVgj5HPdObk45GmJ5aHHRq6uTuaWcUnq1U+yIGBg==",
+      "path": "hotchocolate.types.scalars.upload/14.3.0",
+      "hashPath": "hotchocolate.types.scalars.upload.14.3.0.nupkg.sha512"
+    },
     "HotChocolate.Types.Shared/14.3.0": {
       "type": "package",
       "serviceable": true,
@@ -1290,6 +1537,13 @@
       "sha512": "sha512-lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Http.Features/5.0.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3jG2xS+dx8DDCGV/F+STdPTg89lX3ao3dF/VEPvJaz3wzBIjuadipTtYNEXDIVuOPZwb6jdmhrX9jkzOIBm5cw==",
+      "path": "microsoft.aspnetcore.http.features/5.0.17",
+      "hashPath": "microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512"
     },
     "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
       "type": "package",
@@ -1550,6 +1804,13 @@
       "path": "system.diagnostics.diagnosticsource/9.0.0",
       "hashPath": "system.diagnostics.diagnosticsource.9.0.0.nupkg.sha512"
     },
+    "System.IO.Hashing/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ne1843evDugl0md7Fjzy6QjJrzsjh46ZKbhf8GwBXb5f/gw97J4bxMs0NQKifDuThh/f0bZ0e62NPl1jzTuRqA==",
+      "path": "system.io.hashing/8.0.0",
+      "hashPath": "system.io.hashing.8.0.0.nupkg.sha512"
+    },
     "System.IO.Pipelines/9.0.0": {
       "type": "package",
       "serviceable": true,
@@ -1591,6 +1852,13 @@
       "sha512": "sha512-qmeeYNROMsONF6ndEZcIQ+VxR4Q/TX/7uIVLJqtwIWL7dDWeh0l1UIqgo4wYyjG//5lUNhwkLDSFl+pAWO6oiA==",
       "path": "system.threading.channels/7.0.0",
       "hashPath": "system.threading.channels.7.0.0.nupkg.sha512"
+    },
+    "Yarp.ReverseProxy/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-t16Z+OplJEElJy1Q6t12EwMGF2BeLw8IKjD1ema7ewbCRaMqeVIRPZo3MlxidnRFRK+tV6II8tKYX+7N5ZS98A==",
+      "path": "yarp.reverseproxy/2.2.0",
+      "hashPath": "yarp.reverseproxy.2.2.0.nupkg.sha512"
     }
   }
 }
