@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("aparta+")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2ac1553957532125cc41a61f017af825698af228")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+881588566762f3c1082f29ebd74cf6aa54997ad9")]
 [assembly: System.Reflection.AssemblyProductAttribute("aparta+")]
 [assembly: System.Reflection.AssemblyTitleAttribute("aparta+")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
