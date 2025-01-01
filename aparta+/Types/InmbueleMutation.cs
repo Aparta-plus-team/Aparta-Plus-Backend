@@ -4,7 +4,8 @@ using HotChocolate;
 
 namespace aparta_.GraphQL
 {
-    public class Mutation
+    [MutationType]
+    public class InmuebleMutation
     {
         public async Task<Inmueble> CreateInmueble(
             string codigo,

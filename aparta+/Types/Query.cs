@@ -18,5 +18,11 @@ namespace aparta_.Types
         [UseSorting]
         [UseFiltering]
         public static async Task<IQueryable<Usuario>> GetUsuarios(ApartaPlusContext dbContext) => dbContext.Usuarios;
+
+        [UseOffsetPaging]
+        [UseSorting]
+        [UseFiltering]
+        public static IQueryable<Inmueble> GetInmuebles(ApartaPlusContext dbContext) => dbContext.Inmuebles;
+       
     }
 }
