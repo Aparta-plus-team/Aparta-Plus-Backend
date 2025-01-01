@@ -1293,7 +1293,10 @@
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.2"
         },
         "runtime": {
-          "data-aparta+.dll": {}
+          "data-aparta+.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
