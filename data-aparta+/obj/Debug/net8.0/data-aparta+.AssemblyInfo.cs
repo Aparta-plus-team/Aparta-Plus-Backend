@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("data-aparta+")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+881588566762f3c1082f29ebd74cf6aa54997ad9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+af435078d6c4a37abf2a373d9a3ae5fd250d05f6")]
 [assembly: System.Reflection.AssemblyProductAttribute("data-aparta+")]
 [assembly: System.Reflection.AssemblyTitleAttribute("data-aparta+")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
