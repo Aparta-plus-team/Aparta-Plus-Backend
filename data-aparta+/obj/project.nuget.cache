@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "jcYiRpCAHwo=",
+  "dgSpecHash": "LTCV+KXzBTI=",
   "success": true,
-  "projectFilePath": "C:\\Users\\ichia\\Desktop\\intecs\\10 Trimestre\\Lab construccion Software\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj",
+  "projectFilePath": "c:\\Users\\ichia\\Desktop\\intecs\\10 Trimestre\\Lab construccion Software\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ichia\\.nuget\\packages\\amazon.extensions.cognitoauthentication\\2.5.5\\amazon.extensions.cognitoauthentication.2.5.5.nupkg.sha512",
     "C:\\Users\\ichia\\.nuget\\packages\\awssdk.cognitoidentity\\3.7.300.74\\awssdk.cognitoidentity.3.7.300.74.nupkg.sha512",
