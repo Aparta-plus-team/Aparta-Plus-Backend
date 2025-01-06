@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ichia\\Desktop\\intecs\\10 Trimestre\\Lab construccion Software\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj": {}
+    "c:\\Users\\ichia\\Desktop\\intecs\\10 Trimestre\\Lab construccion Software\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ichia\\Desktop\\intecs\\10 Trimestre\\Lab construccion Software\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj": {
+    "c:\\Users\\ichia\\Desktop\\intecs\\10 Trimestre\\Lab construccion Software\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ichia\\Desktop\\intecs\\10 Trimestre\\Lab construccion Software\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj",
+        "projectUniqueName": "c:\\Users\\ichia\\Desktop\\intecs\\10 Trimestre\\Lab construccion Software\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj",
         "projectName": "data-aparta+",
-        "projectPath": "C:\\Users\\ichia\\Desktop\\intecs\\10 Trimestre\\Lab construccion Software\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj",
+        "projectPath": "c:\\Users\\ichia\\Desktop\\intecs\\10 Trimestre\\Lab construccion Software\\Aparta-Plus-Backend\\data-aparta+\\data-aparta+.csproj",
         "packagesPath": "C:\\Users\\ichia\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ichia\\Desktop\\intecs\\10 Trimestre\\Lab construccion Software\\Aparta-Plus-Backend\\data-aparta+\\obj\\",
+        "outputPath": "c:\\Users\\ichia\\Desktop\\intecs\\10 Trimestre\\Lab construccion Software\\Aparta-Plus-Backend\\data-aparta+\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

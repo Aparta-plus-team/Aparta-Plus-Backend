@@ -33,6 +33,12 @@ namespace aparta_.Types
         [UseSorting]
         [UseFiltering]
         public static IQueryable<Inquilino> GetInquilinos(ApartaPlusContext dbContext) => dbContext.Inquilinos;
+
+        [UseOffsetPaging]
+        [UseSorting]
+        [UseFiltering]
+        public static IQueryable<Propiedad> GetPropiedads(ApartaPlusContext dbContext) => dbContext.Propiedads;
+        
        
     }
 }

@@ -9,6 +9,9 @@ using Amazon;
 using data_aparta_.Repos.Propiedades;
 using Amazon.S3;
 using data_aparta_.Repos.Utils;
+using data_aparta_.Models;
+using data_aparta_.Repos;
+using data_aparta_.Repos.Imuebles;
 
 namespace aparta_
 {
@@ -94,6 +97,11 @@ namespace aparta_
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPropertyRepository, PropertyRepository>();
+            services.AddScoped<IInquilinoRepository, InquilinoRepository>();
+            services.AddScoped<IContratoRepository, ContratoRepository>();
+            services.AddScoped<IInmuebleRepository, InmuebleRepository>();
+            services.AddScoped<IFacturaRepository, FacturaRepository>();
+
             services.AddScoped<S3Uploader>();
 
             return services;
