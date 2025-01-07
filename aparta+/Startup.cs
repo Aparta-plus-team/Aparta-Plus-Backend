@@ -12,6 +12,8 @@ using data_aparta_.Repos.Utils;
 using data_aparta_.Models;
 using data_aparta_.Repos;
 using data_aparta_.Repos.Imuebles;
+using Stripe;
+using data_aparta_.Repos.Payments;
 
 namespace aparta_
 {
@@ -101,8 +103,21 @@ namespace aparta_
             services.AddScoped<IContratoRepository, ContratoRepository>();
             services.AddScoped<IInmuebleRepository, InmuebleRepository>();
             services.AddScoped<IFacturaRepository, FacturaRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
 
+            services.AddSingleton<StripeService>();
+            services.AddScoped<EmailService>();
             services.AddScoped<S3Uploader>();
+
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureStripe(this IServiceCollection services, IConfiguration configuration)
+        {
+            var stripeApiKey = configuration["Stripe:ApiKey"];
+            StripeConfiguration.ApiKey = stripeApiKey;
+            services.Configure<StripeOptions>(configuration.GetSection("Stripe"));
 
             return services;
         }
