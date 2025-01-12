@@ -12,6 +12,8 @@ using data_aparta_.Repos.Utils;
 using data_aparta_.Models;
 using data_aparta_.Repos;
 using data_aparta_.Repos.Imuebles;
+using data_aparta_.DTOs;
+using aparta_.Services;
 
 namespace aparta_
 {
@@ -101,7 +103,7 @@ namespace aparta_
             services.AddScoped<IContratoRepository, ContratoRepository>();
             services.AddScoped<IInmuebleRepository, InmuebleRepository>();
             services.AddScoped<IFacturaRepository, FacturaRepository>();
-
+            services.AddScoped<DashboardStatisticsService>();
             services.AddScoped<S3Uploader>();
 
             return services;
