@@ -3,29 +3,30 @@ using data_aparta_.DTOs;
 using data_aparta_.Models;
 using data_aparta_.Repos.Contracts;
 using data_aparta_.Repos.Utils;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace data_aparta_.Repos.Propiedades
 {
     public class PropertyRepository : IPropertyRepository
     {
-
         private readonly ApartaPlusContext _context;
         private readonly S3Uploader s3Uploader;
 
-        public PropertyRepository(ApartaPlusContext context, S3Uploader s3) { 
+        public PropertyRepository(ApartaPlusContext context, S3Uploader s3)
+        {
             _context = context;
             s3Uploader = s3;
         }
+
+        // Crear nueva propiedad
         public async Task<Propiedad> CreateAsync(CreatePropertyInput input)
         {
-            Propiedad propiedad = new Propiedad { 
+            Propiedad propiedad = new Propiedad
+            {
                 Propiedadid = Guid.NewGuid(),
                 Usuarioid = input.Usuarioid,
                 Nombre = input.Nombre,
@@ -33,10 +34,6 @@ namespace data_aparta_.Repos.Propiedades
                 Fechacreacion = DateOnly.FromDateTime(DateTime.UtcNow),
                 Estado = true
             };
-
-            propiedad.Propiedadid = Guid.NewGuid();
-            propiedad.Fechacreacion = DateOnly.FromDateTime(DateTime.UtcNow);
-            propiedad.Estado = true;
 
             if (propiedad.Usuarioid != null && !await _context.Usuarios.AnyAsync(u => u.Usuarioid == propiedad.Usuarioid))
             {
@@ -49,7 +46,7 @@ namespace data_aparta_.Repos.Propiedades
             return propiedad;
         }
 
-        // Update an existing Propiedad
+        // Actualizar propiedad existente
         public async Task<Propiedad?> UpdateAsync(string id, Propiedad updatedPropiedad)
         {
             var existingPropiedad = await _context.Set<Propiedad>().FindAsync(id);
@@ -72,10 +69,10 @@ namespace data_aparta_.Repos.Propiedades
             return existingPropiedad;
         }
 
-        // Soft delete a Propiedad
+        // Eliminar propiedad (borrado lógico)
         public async Task<bool> DeleteAsync(string id)
         {
-          var propiedad = await _context.Propiedads.FirstOrDefaultAsync(p => p.Propiedadid == Guid.Parse(id));
+            var propiedad = await _context.Propiedads.FirstOrDefaultAsync(p => p.Propiedadid == Guid.Parse(id));
 
             if (propiedad == null || propiedad.Estado == false)
                 return false;
@@ -86,6 +83,15 @@ namespace data_aparta_.Repos.Propiedades
             return true;
         }
 
+        // Obtener propiedades por usuario
+        public async Task<List<Propiedad>> GetPropiedadesByUsuarioId(Guid userId)
+        {
+            return await _context.Propiedads
+                .Where(p => p.Usuarioid == userId && p.Estado == true)
+                .ToListAsync();
+        }
+
+        // Subir archivo
         public async Task<FileUploadResponse> UploadPortrait(FileUploadInput fileInput)
         {
             if (fileInput.File == null)
@@ -101,7 +107,8 @@ namespace data_aparta_.Repos.Propiedades
 
                 var result = await s3Uploader.UploadFileAsync(input);
 
-                return new FileUploadResponse { 
+                return new FileUploadResponse
+                {
                     Key = result.Key,
                     Url = result.Url
                 };
@@ -111,7 +118,5 @@ namespace data_aparta_.Repos.Propiedades
                 throw new Exception(ex.Message);
             }
         }
-
     }
 }
-

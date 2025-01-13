@@ -17,5 +17,7 @@ namespace data_aparta_.Repos.Contracts
         Task<Propiedad?> UpdateAsync(string id, Propiedad propiedad);
         Task<bool> DeleteAsync(string id);
 
+        Task<List<Propiedad>> GetPropiedadesByUsuarioId(Guid userId);
+
     }
 }
