@@ -21,6 +21,7 @@ obj/
 
 # Ignore Visual Studio Code files
 .vscode/
+.vs/
 
 # Ignore logs, generated files, and caches
 *.log
