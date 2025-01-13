@@ -1,4 +1,6 @@
+using aparta_.Services;
 using data_aparta_.Context;
+using data_aparta_.DTOs;
 using data_aparta_.Models;
 using HotChocolate.Data;
 
@@ -38,6 +40,13 @@ namespace aparta_.Types
         [UseSorting]
         [UseFiltering]
         public static IQueryable<Propiedad> GetPropiedads(ApartaPlusContext dbContext) => dbContext.Propiedads;
+
+        public static async Task<DashboardStatisticsDTO> GetDashboardStatistics(
+        Guid userId,
+        [Service] DashboardStatisticsService dashboardService)
+    {
+        return await dashboardService.GetDashboardStatisticsAsync(userId);
+    }
         
        
     }
