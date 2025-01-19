@@ -5,18 +5,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace data_aparta_.Repos.Propiedades
 {
-    public class ContratoRepository : IContratoRepository
+    public class ContratoRepository : IContratoRepository, IAsyncDisposable
     {
-        private readonly ApartaPlusContext _context;
+        private readonly IDbContextFactory<ApartaPlusContext> _dbContextFactory;
+        private ApartaPlusContext? _context;
 
-        public ContratoRepository(ApartaPlusContext context)
+        public ContratoRepository(IDbContextFactory<ApartaPlusContext> dbContextFactory)
         {
-            _context = context;
+            _dbContextFactory = dbContextFactory;
+            _context = _dbContextFactory.CreateDbContext(); // Crea una instancia de DbContext al inicializar
         }
 
         public async Task<Contrato?> GetContratoByIdAsync(Guid id)
         {
-            return await _context.Contratos
+            EnsureContext();
+            return await _context!.Contratos
                 .Include(c => c.Inquilino) // Incluye la relación con Inquilino
                 .Include(c => c.Inmuebles) // Incluye los inmuebles relacionados
                 .FirstOrDefaultAsync(c => c.Contratoid == id);
@@ -24,7 +27,8 @@ namespace data_aparta_.Repos.Propiedades
 
         public async Task<IEnumerable<Contrato>> GetAllContratosAsync()
         {
-            return await _context.Contratos
+            EnsureContext();
+            return await _context!.Contratos
                 .Include(c => c.Inquilino)
                 .Include(c => c.Inmuebles)
                 .ToListAsync();
@@ -32,13 +36,15 @@ namespace data_aparta_.Repos.Propiedades
 
         public async Task AddContratoAsync(Contrato contrato)
         {
-            await _context.Contratos.AddAsync(contrato);
+            EnsureContext();
+            await _context!.Contratos.AddAsync(contrato);
             await _context.SaveChangesAsync();
         }
 
         public async Task UpdateContratoAsync(Contrato contrato)
         {
-            var existingContrato = await _context.Contratos.FindAsync(contrato.Contratoid);
+            EnsureContext();
+            var existingContrato = await _context!.Contratos.FindAsync(contrato.Contratoid);
             if (existingContrato != null)
             {
                 _context.Entry(existingContrato).CurrentValues.SetValues(contrato);
@@ -48,11 +54,31 @@ namespace data_aparta_.Repos.Propiedades
 
         public async Task DeleteContratoAsync(Guid id)
         {
-            var contrato = await _context.Contratos.FindAsync(id);
+            EnsureContext();
+            var contrato = await _context!.Contratos.FindAsync(id);
             if (contrato != null)
             {
                 _context.Contratos.Remove(contrato);
                 await _context.SaveChangesAsync();
+            }
+        }
+
+        // Método para liberar la instancia de DbContext de forma asíncrona
+        public async ValueTask DisposeAsync()
+        {
+            if (_context != null)
+            {
+                await _context.DisposeAsync();
+                _context = null;
+            }
+        }
+
+        // Método para garantizar que el contexto exista antes de cada operación
+        private void EnsureContext()
+        {
+            if (_context == null)
+            {
+                _context = _dbContextFactory.CreateDbContext();
             }
         }
     }

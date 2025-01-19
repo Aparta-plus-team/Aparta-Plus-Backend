@@ -2,38 +2,46 @@ using data_aparta_.Context;
 using data_aparta_.DTOs;
 using data_aparta_.Models;
 using data_aparta_.Repos.Contracts;
-using data_aparta_.Repos.Utils;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace data_aparta_.Repos.Imuebles
 {
-      public class InmuebleRepository : IInmuebleRepository
+    public class InmuebleRepository : IInmuebleRepository, IAsyncDisposable
     {
-        private readonly ApartaPlusContext _context;
+        private readonly IDbContextFactory<ApartaPlusContext> _dbContextFactory;
+        private ApartaPlusContext? _context;
 
-        public InmuebleRepository(ApartaPlusContext context)
+        public InmuebleRepository(IDbContextFactory<ApartaPlusContext> dbContextFactory)
         {
-            _context = context;
+            _dbContextFactory = dbContextFactory;
+            _context = _dbContextFactory.CreateDbContext(); // Crea una instancia del DbContext
         }
 
         public async Task<Inmueble> GetInmuebleByIdAsync(Guid id)
         {
-            return await _context.Inmuebles
+            EnsureContext();
+            var inmueble = await _context!.Inmuebles
                 .Include(i => i.Propiedad) // Relación con Propiedad
                 .Include(i => i.Contrato) // Relación con Contrato
                 .Include(i => i.Facturas) // Relación con Facturas
                 .FirstOrDefaultAsync(i => i.Inmuebleid == id);
+
+            if (inmueble == null)
+            {
+                throw new InvalidOperationException($"Inmueble con ID {id} no encontrado.");
+            }
+
+            return inmueble;
         }
 
         public async Task<IEnumerable<Inmueble>> GetAllInmueblesAsync()
         {
-            return await _context.Inmuebles
+            EnsureContext();
+            return await _context!.Inmuebles
                 .Include(i => i.Propiedad) // Relación con Propiedad
                 .Include(i => i.Contrato) // Relación con Contrato
                 .ToListAsync();
@@ -41,7 +49,8 @@ namespace data_aparta_.Repos.Imuebles
 
         public async Task<IEnumerable<Inmueble>> GetInmueblesByEstadoAsync(bool ocupacion)
         {
-            return await _context.Inmuebles
+            EnsureContext();
+            return await _context!.Inmuebles
                 .Include(i => i.Propiedad)
                 .Where(i => i.Ocupacion == ocupacion)
                 .ToListAsync();
@@ -49,13 +58,15 @@ namespace data_aparta_.Repos.Imuebles
 
         public async Task AddInmuebleAsync(Inmueble inmueble)
         {
-            await _context.Inmuebles.AddAsync(inmueble);
+            EnsureContext();
+            await _context!.Inmuebles.AddAsync(inmueble);
             await _context.SaveChangesAsync();
         }
 
         public async Task UpdateInmuebleAsync(Inmueble inmueble)
         {
-            var existingInmueble = await _context.Inmuebles.FindAsync(inmueble.Inmuebleid);
+            EnsureContext();
+            var existingInmueble = await _context!.Inmuebles.FindAsync(inmueble.Inmuebleid);
             if (existingInmueble != null)
             {
                 _context.Entry(existingInmueble).CurrentValues.SetValues(inmueble);
@@ -65,11 +76,31 @@ namespace data_aparta_.Repos.Imuebles
 
         public async Task DeleteInmuebleAsync(Guid id)
         {
-            var inmueble = await _context.Inmuebles.FindAsync(id);
+            EnsureContext();
+            var inmueble = await _context!.Inmuebles.FindAsync(id);
             if (inmueble != null)
             {
                 _context.Inmuebles.Remove(inmueble);
                 await _context.SaveChangesAsync();
+            }
+        }
+
+        // Asegura que el contexto está inicializado
+        private void EnsureContext()
+        {
+            if (_context == null)
+            {
+                _context = _dbContextFactory.CreateDbContext();
+            }
+        }
+
+        // Implementación de IAsyncDisposable
+        public async ValueTask DisposeAsync()
+        {
+            if (_context != null)
+            {
+                await _context.DisposeAsync();
+                _context = null;
             }
         }
     }

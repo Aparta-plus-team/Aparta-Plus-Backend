@@ -11,20 +11,24 @@ using System.Threading.Tasks;
 
 namespace data_aparta_.Repos.Propiedades
 {
-    public class PropertyRepository : IPropertyRepository
+    public class PropertyRepository : IPropertyRepository, IAsyncDisposable
     {
-        private readonly ApartaPlusContext _context;
-        private readonly S3Uploader s3Uploader;
+        private readonly IDbContextFactory<ApartaPlusContext> _dbContextFactory;
+        private readonly S3Uploader _s3Uploader;
+        private ApartaPlusContext? _context;
 
-        public PropertyRepository(ApartaPlusContext context, S3Uploader s3)
+        public PropertyRepository(IDbContextFactory<ApartaPlusContext> dbContextFactory, S3Uploader s3)
         {
-            _context = context;
-            s3Uploader = s3;
+            _dbContextFactory = dbContextFactory;
+            _s3Uploader = s3;
+            _context = _dbContextFactory.CreateDbContext(); // Crear instancia del contexto
         }
 
         // Crear nueva propiedad
         public async Task<Propiedad> CreateAsync(CreatePropertyInput input)
         {
+            EnsureContext();
+
             Propiedad propiedad = new Propiedad
             {
                 Propiedadid = Guid.NewGuid(),
@@ -35,7 +39,7 @@ namespace data_aparta_.Repos.Propiedades
                 Estado = true
             };
 
-            if (propiedad.Usuarioid != null && !await _context.Usuarios.AnyAsync(u => u.Usuarioid == propiedad.Usuarioid))
+            if (propiedad.Usuarioid != null && !await _context!.Usuarios.AnyAsync(u => u.Usuarioid == propiedad.Usuarioid))
             {
                 throw new ArgumentException("El usuario especificado no existe.");
             }
@@ -49,7 +53,9 @@ namespace data_aparta_.Repos.Propiedades
         // Actualizar propiedad existente
         public async Task<Propiedad?> UpdateAsync(string id, Propiedad updatedPropiedad)
         {
-            var existingPropiedad = await _context.Set<Propiedad>().FindAsync(id);
+            EnsureContext();
+
+            var existingPropiedad = await _context!.Set<Propiedad>().FindAsync(Guid.Parse(id));
 
             if (existingPropiedad == null || existingPropiedad.Estado == false)
                 return null;
@@ -72,7 +78,9 @@ namespace data_aparta_.Repos.Propiedades
         // Eliminar propiedad (borrado lógico)
         public async Task<bool> DeleteAsync(string id)
         {
-            var propiedad = await _context.Propiedads.FirstOrDefaultAsync(p => p.Propiedadid == Guid.Parse(id));
+            EnsureContext();
+
+            var propiedad = await _context!.Propiedads.FirstOrDefaultAsync(p => p.Propiedadid == Guid.Parse(id));
 
             if (propiedad == null || propiedad.Estado == false)
                 return false;
@@ -86,7 +94,9 @@ namespace data_aparta_.Repos.Propiedades
         // Obtener propiedades por usuario
         public async Task<List<Propiedad>> GetPropiedadesByUsuarioId(Guid userId)
         {
-            return await _context.Propiedads
+            EnsureContext();
+
+            return await _context!.Propiedads
                 .Where(p => p.Usuarioid == userId && p.Estado == true)
                 .ToListAsync();
         }
@@ -105,7 +115,7 @@ namespace data_aparta_.Repos.Propiedades
                     Type = "contract" // o el tipo que corresponda
                 };
 
-                var result = await s3Uploader.UploadFileAsync(input);
+                var result = await _s3Uploader.UploadFileAsync(input);
 
                 return new FileUploadResponse
                 {
@@ -116,6 +126,25 @@ namespace data_aparta_.Repos.Propiedades
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        // Asegura que el contexto está inicializado
+        private void EnsureContext()
+        {
+            if (_context == null)
+            {
+                _context = _dbContextFactory.CreateDbContext();
+            }
+        }
+
+        // Implementación de IAsyncDisposable
+        public async ValueTask DisposeAsync()
+        {
+            if (_context != null)
+            {
+                await _context.DisposeAsync();
+                _context = null;
             }
         }
     }

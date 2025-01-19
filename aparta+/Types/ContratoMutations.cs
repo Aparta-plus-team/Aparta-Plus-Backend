@@ -1,7 +1,6 @@
 using data_aparta_.DTOs;
 using data_aparta_.Models;
 using data_aparta_.Repos.Contracts;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace aparta_.GraphQL
 {
@@ -45,9 +44,46 @@ namespace aparta_.GraphQL
             if (!string.IsNullOrEmpty(fiadorcorreo)) existingContrato.Fiadorcorreo = fiadorcorreo;
             if (estado.HasValue) existingContrato.Estado = estado;
 
-            // Guardar los cambios
+            // Guardar los cambios a través del repositorio
             await contratoRepository.UpdateContratoAsync(existingContrato);
+
             return existingContrato;
+        }
+
+        // Método para crear un nuevo contrato
+        public async Task<Contrato> CreateContrato(
+            Guid? inquilinoId,
+            string? contratourl,
+            int? diapago,
+            int? mora,
+            int? precioalquiler,
+            DateOnly? fechafirma,
+            DateOnly? fechaterminacion,
+            string? fiadornombre,
+            string? fiadortelefono,
+            string? fiadorcorreo,
+            bool? estado,
+            [Service] IContratoRepository contratoRepository)
+        {
+            var contrato = new Contrato
+            {
+                Contratoid = Guid.NewGuid(), // Genera un nuevo ID único
+                Inquilinoid = inquilinoId,
+                Contratourl = contratourl,
+                Diapago = diapago,
+                Mora = mora,
+                Precioalquiler = precioalquiler,
+                Fechafirma = fechafirma,
+                Fechaterminacion = fechaterminacion,
+                Fiadornombre = fiadornombre,
+                Fiadortelefono = fiadortelefono,
+                Fiadorcorreo = fiadorcorreo,
+                Estado = estado
+            };
+
+            // Agregar el contrato al repositorio
+            await contratoRepository.AddContratoAsync(contrato);
+            return contrato;
         }
     }
 }
