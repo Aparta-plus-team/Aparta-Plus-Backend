@@ -28,7 +28,7 @@ namespace aparta_.Types
 
         }
         
-        public async Task<FileUploadResponse> UploadPortrait(IFile file)
+        public async Task<FileUploadResponse> UploadPortrait(IFile file, string propertyId)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace aparta_.Types
                     Type = "portrait",
                     PropertyId = "1"
 
-                });
+                }, propertyId);
             }
             catch (Exception ex)
             {

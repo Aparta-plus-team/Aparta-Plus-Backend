@@ -1,4 +1,5 @@
 ﻿using data_aparta_.DTOs;
+using data_aparta_.Repos.Payments;
 using Microsoft.Extensions.Options;
 using Stripe;
 using Stripe.Checkout;
@@ -13,14 +14,16 @@ namespace data_aparta_.Repos.Utils
     public  class StripeService
     {
         private readonly string _apiKey;
+        private readonly InvoiceRepository invoiceRepository;
 
-        public StripeService(IOptions<StripeOptions> stripeOptions)
+        public StripeService(IOptions<StripeOptions> stripeOptions, InvoiceRepository invoiceRepository)
         {
             _apiKey = stripeOptions.Value.ApiKey;
             StripeConfiguration.ApiKey = _apiKey;
+            this.invoiceRepository = invoiceRepository;
         }
 
-        public async Task<StripeSessionResponse> CreatePaymentSession(decimal price, string description, int quantity)
+        public async Task<StripeSessionResponse> CreatePaymentSession(decimal price, string description, int quantity, string inmuebleId)
         {
             var options = new SessionCreateOptions
             {
@@ -54,6 +57,15 @@ namespace data_aparta_.Repos.Utils
                 SessionId = session.Id,
                 Url = session.Url
             };
+
+
+            // Crear facturas
+            if (quantity > 1)
+            {
+                var invoices = await invoiceRepository.CreateInvoicesInAdvanced(quantity, inmuebleId, response.SessionId, response.Url);
+            }
+
+            var invoice = await invoiceRepository.CreateInvoice(inmuebleId, response.SessionId, response.Url);
 
             return response;
         }

@@ -19,7 +19,7 @@ namespace aparta_.Types
         {
             try
             {
-                return await _paymentRepository.CreatePaymentSession(price, description, quantity, inmuebleId);
+                return await _paymentRepository.CreatePaymentSession(quantity, inmuebleId);
             }catch(Exception e)
             {
                 throw new GraphQLException(e.Message);

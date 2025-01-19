@@ -9,6 +9,6 @@ namespace data_aparta_.Repos.Contracts
 {
     public interface IPaymentRepository
     {
-        Task<StripeSessionResponse> CreatePaymentSession(decimal price, string description, int quantity, string inmuebleId);
+        Task<StripeSessionResponse> CreatePaymentSession(int quantity, string inmuebleId);
     }
 }

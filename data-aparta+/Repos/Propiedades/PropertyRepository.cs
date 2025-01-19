@@ -142,9 +142,9 @@ namespace data_aparta_.Repos.Propiedades
 
                 Imagenespropiedade imagenespropiedade = new Imagenespropiedade
                 {
-                    Imagenespropiedadeid = Guid.NewGuid(),
+                    Imagenid = Guid.NewGuid(),
                     Propiedadid = Guid.Parse(propertyId),
-                    Url = result.Url,
+                    Imagenurl = result.Url,
                     Fechacreacion = DateOnly.FromDateTime(DateTime.UtcNow),
                     Estado = true,
                 };
@@ -163,7 +163,7 @@ namespace data_aparta_.Repos.Propiedades
 
         public async Task<Imagenespropiedade> DeleteImage(string id)
         {
-            var imagen = await _context.Imagenespropiedades.FirstOrDefaultAsync(i => i.Imagenespropiedadeid == Guid.Parse(id));
+            var imagen = await _context.Imagenespropiedades.FirstOrDefaultAsync(i => i.Imagenid == Guid.Parse(id));
 
             if (imagen == null || imagen.Estado == false)
                 throw new ArgumentException("La imagen especificada no existe.");

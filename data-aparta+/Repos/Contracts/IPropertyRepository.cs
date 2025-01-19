@@ -13,7 +13,7 @@ namespace data_aparta_.Repos.Contracts
     public interface IPropertyRepository
     {
         Task<Propiedad> CreateAsync(CreatePropertyInput input);
-        Task<FileUploadResponse> UploadPortrait (FileUploadInput input);
+        Task<FileUploadResponse> UploadPortrait (FileUploadInput input, string id);
         Task<Propiedad?> UpdateAsync(string id, Propiedad propiedad);
         Task<bool> DeleteAsync(string id);
 

@@ -105,8 +105,9 @@ namespace aparta_
             services.AddScoped<IFacturaRepository, FacturaRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
 
-            services.AddSingleton<StripeService>();
+            services.AddScoped<StripeService>();
             services.AddScoped<EmailService>();
+            services.AddScoped<InvoiceRepository>();
             services.AddScoped<S3Uploader>();
 
 

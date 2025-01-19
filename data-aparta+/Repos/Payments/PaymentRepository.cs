@@ -23,9 +23,10 @@ namespace data_aparta_.Repos.Payments
             _context = apartaPlusContext;
         }
 
-        public async Task<StripeSessionResponse> CreatePaymentSession(decimal price, string description, int quantity, string inmuebleId)
+        public async Task<StripeSessionResponse> CreatePaymentSession(int quantity, string inmuebleId)
         {
             var contract = await GetContract(inmuebleId);
+            string description = "";
 
             if (contract == null) return null;
 
@@ -36,7 +37,7 @@ namespace data_aparta_.Repos.Payments
                 quantity = 1;
                 description = "Deuda correspondiente a " + debt.quantity + " meses pendientes adicionando la mora";
 
-                var debtResponse = await _stripeService.CreatePaymentSession(debt.debt, description, quantity);
+                var debtResponse = await _stripeService.CreatePaymentSession(debt.debt, description, quantity, inmuebleId);
                 return debtResponse;
             }
 
@@ -47,14 +48,53 @@ namespace data_aparta_.Repos.Payments
                 quantity = 1;
                 description = "Pago de renta con mora correspondiente a " + mora + " por atraso";
 
-                var moraResponse = await _stripeService.CreatePaymentSession(mora, description, quantity);
+                var moraResponse = await _stripeService.CreatePaymentSession(mora, description, quantity, inmuebleId);
                 return moraResponse;
             }
 
             //Si no hay mora, crear la sesion de pago con pagos adelantados (si es requerido)
             description = "Pago de renta correspondiente a " + quantity + " mes/es por adelantado";
-            var response = await _stripeService.CreatePaymentSession(price, description, quantity);
+            var response = await _stripeService.CreatePaymentSession(contract.Precioalquiler ?? 0, description, quantity, inmuebleId);
             return response;
+        }
+
+
+        public async Task<bool> ProcessPayment(string sessionId)
+        {
+            var invoices = await _context.Facturas.Where(f => f.SessionId == sessionId)
+                .Include(f => f.Inmueble)
+                .Include(f => f.Inmueble.Contrato)
+                .ToListAsync();
+
+            foreach (var invoice in invoices)
+            {
+
+                if (invoice.Estado == "Pendiente Adelanto")
+                {
+                    invoice.Estado = "Adelantado";
+                    await _context.SaveChangesAsync();
+                    continue;
+                }
+                
+                if (invoice.Inmueble.Contrato.Diapago > DateTime.Now.Day && invoice.Estado == "Pendiente")
+                {
+                    invoice.Estado = "Atrasado";
+                }
+                else
+                {
+                    invoice.Estado = "Pagado";
+                }
+
+                var delayedInvoices = await _context.Facturas.Where(f => f.Inmuebleid == invoice.Inmuebleid && f.Estado == "No Pagado")
+                    .ToListAsync();
+                foreach (var delayed in delayedInvoices)
+                {
+                    delayed.Estado = "Cancelado";
+                }
+                await _context.SaveChangesAsync();
+            }
+            // Procesar el pago
+            return true;
         }
 
 
