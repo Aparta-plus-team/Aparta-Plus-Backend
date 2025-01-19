@@ -75,6 +75,11 @@ namespace aparta_.Types
             return await userRepository.ChangeUserInfoAsync(input);
         }
 
+        public async Task<bool> UserConfirmed(string email , [Service] IAuthRepository authRepository)
+        {
+            return await authRepository.IsUserConfirmedAsync(email);
+        }
+
     }
 
 }

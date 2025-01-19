@@ -86,7 +86,7 @@ namespace data_aparta_.Repos.Auth
                 _userPool.ClientID,
                 _userPool,
                 _cognitoClient,
-                _clientSecret  
+                _clientSecret
             );
 
             try
@@ -217,10 +217,34 @@ namespace data_aparta_.Repos.Auth
                 throw new Exception($"Error confirming email update: {ex.Message}");
             }
         }
+
+        public async Task<bool> IsUserConfirmedAsync(string email)
+        {
+            try
+            {
+                var request = new AdminGetUserRequest
+                {
+                    UserPoolId = _userPool.PoolID,
+                    Username = email,
+                };
+
+                try
+                {
+                    var response = await _cognitoClient.AdminGetUserAsync(request);
+                    return response.UserStatus == UserStatusType.CONFIRMED;
+                }
+                catch (UserNotFoundException)
+                {
+                    throw new Exception($"Usuario no encontrado: {email}");
+                }
+            }
+            catch (AmazonCognitoIdentityProviderException ex)
+            {
+                throw new Exception($"Error checking user confirmation status: {ex.Message}");
+            }
+        }
     }
-
-
-}
+    }
 
 public class UpdateEmailResponse
     {
