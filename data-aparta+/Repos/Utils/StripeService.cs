@@ -64,8 +64,12 @@ namespace data_aparta_.Repos.Utils
             {
                 var invoices = await invoiceRepository.CreateInvoicesInAdvanced(quantity, inmuebleId, response.SessionId, response.Url);
             }
+            else
+            {
+                var invoice = await invoiceRepository.CreateInvoice(inmuebleId, response.SessionId, response.Url, price);
+            }
 
-            var invoice = await invoiceRepository.CreateInvoice(inmuebleId, response.SessionId, response.Url);
+
 
             return response;
         }

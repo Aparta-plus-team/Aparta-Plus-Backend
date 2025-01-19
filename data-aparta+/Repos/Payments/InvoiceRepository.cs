@@ -1,4 +1,5 @@
-﻿using data_aparta_.Context;
+﻿using Amazon.Runtime.Internal.Transform;
+using data_aparta_.Context;
 using data_aparta_.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -76,7 +77,7 @@ namespace data_aparta_.Repos.Payments
                     Inmuebleid = property.Inmuebleid,
                     Monto = property.Contrato.Precioalquiler,
                     Fechapago = DateOnly.FromDateTime(DateTime.Now.AddMonths(i)),
-                    Estado = "Pendiente Adelanto"
+                    Estado = "Pendiente Adelanto" 
                 };
 
                 invoices.Add(invoice);
@@ -88,7 +89,7 @@ namespace data_aparta_.Repos.Payments
         }
 
 
-        public async Task<Factura> CreateInvoice(string inmuebleId, string sessionId, string url)
+        public async Task<Factura> CreateInvoice(string inmuebleId, string sessionId, string url, decimal price)
         {
             var property = await _context.Inmuebles.Include(x => x.Contrato).FirstOrDefaultAsync(x => x.Inmuebleid == Guid.Parse(inmuebleId));
 
@@ -98,7 +99,7 @@ namespace data_aparta_.Repos.Payments
                 SessionId = sessionId,
                 Url = url,
                 Inmuebleid = property.Inmuebleid,
-                Monto = property.Contrato.Precioalquiler,
+                Monto = price,
                 Fechapago = DateOnly.FromDateTime(DateTime.Now),
                 Estado = "Pendiente"
             };

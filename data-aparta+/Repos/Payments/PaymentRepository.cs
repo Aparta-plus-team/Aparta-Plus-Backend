@@ -1,4 +1,5 @@
-﻿using data_aparta_.Context;
+﻿using Amazon.S3.Model.Internal.MarshallTransformations;
+using data_aparta_.Context;
 using data_aparta_.DTOs;
 using data_aparta_.Models;
 using data_aparta_.Repos.Contracts;
@@ -26,9 +27,20 @@ namespace data_aparta_.Repos.Payments
         public async Task<StripeSessionResponse> CreatePaymentSession(int quantity, string inmuebleId)
         {
             var contract = await GetContract(inmuebleId);
+            if (quantity == 0) quantity = 1;
             string description = "";
 
             if (contract == null) return null;
+
+            if (await CheckPaid(inmuebleId))
+            {
+                return new StripeSessionResponse
+                {
+                    SessionId = "Pagado",
+                    Url = "success web"
+
+                };
+            }
 
             //Ver si hay deudas, y, hacer la sesionde pago con la deuda de todas las facturas NO PAGADAS
             if (await IsInDebt(inmuebleId))
@@ -52,6 +64,8 @@ namespace data_aparta_.Repos.Payments
                 return moraResponse;
             }
 
+
+
             //Si no hay mora, crear la sesion de pago con pagos adelantados (si es requerido)
             description = "Pago de renta correspondiente a " + quantity + " mes/es por adelantado";
             var response = await _stripeService.CreatePaymentSession(contract.Precioalquiler ?? 0, description, quantity, inmuebleId);
@@ -66,12 +80,14 @@ namespace data_aparta_.Repos.Payments
                 .Include(f => f.Inmueble.Contrato)
                 .ToListAsync();
 
+            Console.WriteLine(invoices);
+
             foreach (var invoice in invoices)
             {
 
                 if (invoice.Estado == "Pendiente Adelanto")
                 {
-                    invoice.Estado = "Adelantado";
+                    invoice.Estado = "Por Adelantado";
                     await _context.SaveChangesAsync();
                     continue;
                 }
@@ -116,9 +132,15 @@ namespace data_aparta_.Repos.Payments
 
         private async Task<bool> IsInMora(Contrato contract, string inmuebleId)
         {
-            // Ver si hay deudas asociadas al contrato
 
-            var debts = await _context.Facturas.Where(f => f.Inmuebleid == Guid.Parse(inmuebleId) && f.Estado == "Atrasado").ToListAsync();
+            if (contract.Diapago < DateTime.Now.Day)
+            {
+                return true;
+            }
+            return false;
+            // Ver si hay deudas asociadas al contrato
+           
+            /*var debts = await _context.Facturas.Where(f => f.Inmuebleid == Guid.Parse(inmuebleId) && f.Estado == "Atrasado").ToListAsync();
             DateTime fechaPago = new DateTime(DateTime.Now.Year, DateTime.Now.Month, contract.Diapago ?? 15);
 
             foreach (var debt in debts)
@@ -128,12 +150,17 @@ namespace data_aparta_.Repos.Payments
                     return true;
                 }
             }
-            return false;
+            return false;*/
         }
 
         private async Task<Contrato> GetContract(string inmuebleId)
         {
-            var inmueble = await _context.Inmuebles.Where(i => i.Inmuebleid == Guid.Parse(inmuebleId)).Include(i => i.Contrato).FirstOrDefaultAsync();
+            var inmueble = await _context.Inmuebles.Where(i => i.Inmuebleid == Guid.Parse(inmuebleId))
+                .Include(i => i.Contrato).FirstOrDefaultAsync();
+
+
+            var inmueble2 = await _context.Inmuebles.FirstOrDefaultAsync();
+            Console.WriteLine(inmueble2.Codigo);
 
             if (inmueble.Contrato == null)
             {
@@ -159,15 +186,29 @@ namespace data_aparta_.Repos.Payments
                 debt += factura.Monto ?? 0;
             }
 
-            debt = debt * ((contract.Mora / 100) ?? 2);
+            debt = debt + ( debt * (contract.Mora / 100) ?? 2);
 
             return new Debt { debt = debt, quantity = debts.Count };
 
         }
 
+        private async Task<bool> CheckPaid(string inmuebleId)
+        {
+            var pid = await _context.Facturas.Where(f => f.Inmuebleid == Guid.Parse(inmuebleId) 
+            && (f.Estado == "Pagado" || f.Estado == "Por Adelantado") && f.Fechapago.Value.Month == DateTime.Now.Month &&
+                   f.Fechapago.Value.Year == DateTime.Now.Year).ToListAsync();
+
+            if (pid.Count > 0 && await IsInDebt(inmuebleId) == false)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private async Task<decimal> CalculateMora(Contrato contract, string inmuebleId)
         {
-            var debts = await _context.Facturas.Where(f => f.Inmuebleid == Guid.Parse(inmuebleId) && f.Estado == "Atrasado").ToListAsync();
+            var debts = await _context.Facturas.Where(f => f.Inmuebleid == Guid.Parse(inmuebleId) && f.Estado == "No Pagado").ToListAsync();
             decimal debt = 0;
 
             foreach (var factura in debts)
@@ -175,7 +216,10 @@ namespace data_aparta_.Repos.Payments
                 debt += factura.Monto ?? 0;
             }
 
-            return debt * ((contract.Mora / 100) ?? 2);
+            decimal result = debt + (contract.Precioalquiler ?? 1) + ((contract.Precioalquiler ?? 1) * ( 1 + (contract.Mora / 100) ?? 2));
+
+
+            return result;
 
         }
         #endregion
