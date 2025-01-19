@@ -1,8 +1,10 @@
 ﻿using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
 using Amazon.Extensions.CognitoAuthentication;
+using data_aparta_.Context;
 using data_aparta_.DTOs;
 using data_aparta_.Repos.Contracts;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -19,7 +21,7 @@ namespace data_aparta_.Repos.Auth
         private readonly AmazonCognitoIdentityProviderClient _cognitoClient;
         private readonly string _clientSecret;
 
-        public AuthRepository(IConfiguration configuration, AmazonCognitoIdentityProviderClient client)
+        public AuthRepository(IConfiguration configuration, AmazonCognitoIdentityProviderClient client, ApartaPlusContext context)
         {
             _cognitoClient = client;
             _clientSecret = configuration["AWS:ClientSecret"];

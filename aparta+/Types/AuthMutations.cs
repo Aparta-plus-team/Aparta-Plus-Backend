@@ -1,5 +1,6 @@
 ﻿using Amazon.S3.Model;
 using data_aparta_.DTOs;
+using data_aparta_.Repos.Auth;
 using data_aparta_.Repos.Contracts;
 
 namespace aparta_.Types
@@ -7,6 +8,7 @@ namespace aparta_.Types
     [MutationType]
     public class AuthMutations
 {
+        /*
         private readonly IAuthRepository authRepository;
         private readonly IUserRepository userRepository;
 
@@ -15,8 +17,11 @@ namespace aparta_.Types
             authRepository = repo;
             this.userRepository = userRepository;
         }
+        */
 
-        public async Task<string> RegisterUser(RegisterInput input)
+        public async Task<string> RegisterUser(RegisterInput input, 
+            [Service] IAuthRepository authRepository,
+            [Service] IUserRepository userRepository)
         {
             try
             {
@@ -31,28 +36,28 @@ namespace aparta_.Types
 
         }
 
-        public async Task<string> ConfirmUser(ConfirmInput input)
+        public async Task<string> ConfirmUser(ConfirmInput input, [Service] IAuthRepository authRepository)
         {
             await authRepository.ConfirmUserAsync(input);
             return "User confirmed successfully";
         }
 
-        public async Task<string> LoginUser(LoginInput input)
+        public async Task<string> LoginUser(LoginInput input, [Service] IAuthRepository authRepository)
         {
             return await authRepository.LoginUserAsync(input);
         }
-        public async Task<string> ForgotPassword(string email)
+        public async Task<string> ForgotPassword(string email, [Service] IAuthRepository authRepository)
         {
             await authRepository.ForgotPasswordAsync(email);
             return "Password reset email sent successfully";
         }
-        public async Task<string> ConfirmForgotPassword(ChangePasswordInput input)
+        public async Task<string> ConfirmForgotPassword(ChangePasswordInput input, [Service] IAuthRepository authRepository)
         {
             await authRepository.ConfirmForgotPasswordAsync(input);
             return "Password changed successfully";
         }
 
-        public async Task<UserResponse> GetUserByToken(string token)
+        public async Task<UserResponse> GetUserByToken(string token, [Service] IUserRepository userRepository)
         {
             return await userRepository.GetUserByJWT(token);
         }
@@ -65,7 +70,7 @@ namespace aparta_.Types
         {
             return await authRepository.ConfirmEmailUpdateAsync(confirmationCode, accessToken);
         }*/
-        public async Task<UserResponse> ChangeUserInfo(ChangeUserInfoInput input)
+        public async Task<UserResponse> ChangeUserInfo(ChangeUserInfoInput input, [Service] IUserRepository userRepository)
         {
             return await userRepository.ChangeUserInfoAsync(input);
         }

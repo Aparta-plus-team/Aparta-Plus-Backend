@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace data_aparta_.Repos.Auth
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : IUserRepository, IAsyncDisposable
     {
         private readonly ApartaPlusContext _context;
 
-        public UserRepository(ApartaPlusContext context) { 
-            _context = context;
+        public UserRepository(IDbContextFactory<ApartaPlusContext> dbContextFactory) { 
+            _context = dbContextFactory.CreateDbContext();
         }
         public async Task CreateUserAsync(RegisterInput register, Guid id)
         {
@@ -109,6 +109,9 @@ namespace data_aparta_.Repos.Auth
             };
         }
 
-
+        public ValueTask DisposeAsync()
+        {
+            return _context.DisposeAsync();
+        }
     }
 }
