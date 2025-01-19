@@ -27,7 +27,6 @@ namespace data_aparta_.Repos.Auth
                 Usuarionombre = register.Name,
                 Usuariocorreo = register.Email,
                 Usuariotelefono = register.PhoneNumber,
-               // Usuariocreado = DateTime.Now,
                 Estado = true,
             };
 
@@ -85,6 +84,28 @@ namespace data_aparta_.Repos.Auth
             return new UserResponse
             {
 
+            };
+        }
+
+        public async Task<UserResponse> ChangeUserInfoAsync(ChangeUserInfoInput changeUserInfoInput)
+        {
+            Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Usuarioid.ToString() == changeUserInfoInput.UserId);
+
+            if (user == null)
+            {
+                throw new Exception("Usuario no encontrado");
+            }
+
+            user.Usuarionombre = changeUserInfoInput.Name;
+            user.Usuariotelefono = changeUserInfoInput.PhoneNumber;
+
+            await _context.SaveChangesAsync();
+
+            return new UserResponse
+            {
+                Id = user.Usuarioid,
+                Email = user.Usuariocorreo,
+                Username = user.Usuarionombre
             };
         }
 

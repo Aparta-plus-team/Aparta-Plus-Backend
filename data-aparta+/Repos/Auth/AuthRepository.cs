@@ -161,5 +161,68 @@ namespace data_aparta_.Repos.Auth
                 throw new Exception($"Error confirming password reset: {ex.Message}");
             }
         }
+
+        public async Task<UpdateEmailResponse> UpdateEmailAsync(string newEmail, string accessToken)
+        {
+            try
+            {
+                var attributes = new List<AttributeType>
+            {
+                new AttributeType
+                {
+                    Name = "email",
+                    Value = newEmail
+                }
+            };
+
+                var updateRequest = new UpdateUserAttributesRequest
+                {
+                    UserAttributes = attributes,
+                    AccessToken = accessToken
+                };
+
+                await _cognitoClient.UpdateUserAttributesAsync(updateRequest);
+
+                return new UpdateEmailResponse
+                {
+                    Success = true,
+                    Message = "Se ha enviado un código de verificación al nuevo correo electrónico",
+                    DestinationEmail = newEmail
+                };
+            }
+            catch (AmazonCognitoIdentityProviderException ex)
+            {
+                throw new Exception($"Error updating email: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> ConfirmEmailUpdateAsync(string confirmationCode, string accessToken)
+        {
+            try
+            {
+                var verifyRequest = new VerifyUserAttributeRequest
+                {
+                    AttributeName = "email",
+                    Code = confirmationCode,
+                    AccessToken = accessToken
+                };
+
+                await _cognitoClient.VerifyUserAttributeAsync(verifyRequest);
+                return true;
+            }
+            catch (AmazonCognitoIdentityProviderException ex)
+            {
+                throw new Exception($"Error confirming email update: {ex.Message}");
+            }
+        }
     }
+
+
+}
+
+public class UpdateEmailResponse
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; }
+        public string DestinationEmail { get; set; }
     }

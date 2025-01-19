@@ -12,4 +12,11 @@ namespace data_aparta_.DTOs
         public string Email { get; set; }
         public Guid Id { get; set; }
     }
+
+    public class ChangeUserInfoInput
+    {
+        public string Name { get; set; }
+        public string PhoneNumber { get; set; }
+        public string UserId { get; set; }
+    }
 }

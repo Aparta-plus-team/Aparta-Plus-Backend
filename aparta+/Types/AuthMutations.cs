@@ -1,4 +1,5 @@
-﻿using data_aparta_.DTOs;
+﻿using Amazon.S3.Model;
+using data_aparta_.DTOs;
 using data_aparta_.Repos.Contracts;
 
 namespace aparta_.Types
@@ -54,6 +55,19 @@ namespace aparta_.Types
         public async Task<UserResponse> GetUserByToken(string token)
         {
             return await userRepository.GetUserByJWT(token);
+        }
+        /*
+        public async Task<UpdateEmailResponse> UpdateEmail(string newEmail, string accessToken)
+        {
+            return await authRepository.UpdateEmailAsync(newEmail, accessToken);
+        }
+        public async Task<bool> ConfirmEmailUpdate(string confirmationCode, string accessToken)
+        {
+            return await authRepository.ConfirmEmailUpdateAsync(confirmationCode, accessToken);
+        }*/
+        public async Task<UserResponse> ChangeUserInfo(ChangeUserInfoInput input)
+        {
+            return await userRepository.ChangeUserInfoAsync(input);
         }
 
     }
