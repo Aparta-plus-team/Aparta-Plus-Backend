@@ -12,6 +12,7 @@ namespace data_aparta_.Repos.Contracts
 
         Task CreateUserAsync(RegisterInput register, Guid id);
         Task<UserResponse> GetUserByCognitoIdAsync(string userId);
+        Task<UserResponse> GetUserByJWT(string jwt);
 
     }
 }

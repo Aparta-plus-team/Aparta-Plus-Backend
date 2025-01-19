@@ -51,6 +51,11 @@ namespace aparta_.Types
             return "Password changed successfully";
         }
 
+        public async Task<UserResponse> GetUserByToken(string token)
+        {
+            return await userRepository.GetUserByJWT(token);
+        }
+
     }
 
 }
