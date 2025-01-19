@@ -1,7 +1,35 @@
-.vs
+# Ignore build output
 bin/
 obj/
-/packages/
-riderModule.iml
-/_ReSharper.Caches/
-/.idea
+*.exe
+*.dll
+*.pdb
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.unsuccessfulbuild
+
+# Ignore NuGet packages
+*.nuget/
+*.nuget.cache
+
+# Ignore Rider IDE files
+.idea/
+*.sln.iml
+
+# Ignore Visual Studio Code files
+.vscode/
+.vs/
+
+# Ignore logs, generated files, and caches
+*.log
+*.cache
+*.GeneratedMSBuildEditorConfig
+
+# Ignore project lock files
+project.lock.json
+
+# Ignore temporary files
+*.tmp
