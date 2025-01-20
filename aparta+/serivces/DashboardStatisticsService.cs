@@ -36,7 +36,7 @@ namespace aparta_.Services
                 var inmueblesUsuario = inmuebles.Where(i => propiedades.Any(p => p.Propiedadid == i.Propiedadid)).ToList();
 
                 // Calcular propiedades alquiladas (inmuebles con Contratoid asociado)
-                int propiedadesAlquiladas = inmueblesUsuario.Count(i => i.Contratoid.HasValue);
+                int propiedadesAlquiladas = inmueblesUsuario.Count(i => i.Ocupacion.HasValue);
 
                 // Obtener contratos asociados a los inmuebles del usuario
                 var contratos = await _contratoRepository.GetAllContratosAsync();
