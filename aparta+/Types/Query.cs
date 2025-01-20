@@ -13,41 +13,52 @@ namespace aparta_.Types
             => new Book("C# in depth.", new Author("Jon Skeet"));
 
         [UseOffsetPaging]
+        [UseProjection]
+        [UseFiltering]
         [UseSorting]
-        public static async Task<IQueryable<Factura>> GetFacturas(ApartaPlusContext dbContext) => dbContext.Facturas;
+        public static async Task<IQueryable<Factura>> GetFacturas(ApartaPlusContext dbContext) => 
+            dbContext.Facturas;
 
         [UseOffsetPaging]
-        [UseSorting]
+        [UseProjection]
         [UseFiltering]
-        public static async Task<IQueryable<Usuario>> GetUsuarios(ApartaPlusContext dbContext) => dbContext.Usuarios;
+        [UseSorting]
+        public static async Task<IQueryable<Usuario>> GetUsuarios(ApartaPlusContext dbContext) => 
+            dbContext.Usuarios;
 
         [UseOffsetPaging]
-        [UseSorting]
+        [UseProjection]
         [UseFiltering]
-        public static IQueryable<Inmueble> GetInmuebles(ApartaPlusContext dbContext) => dbContext.Inmuebles;
+        [UseSorting]
+        public static IQueryable<Inmueble> GetInmuebles(ApartaPlusContext dbContext) => 
+            dbContext.Inmuebles;
 
         [UseOffsetPaging]
-        [UseSorting]
+        [UseProjection]
         [UseFiltering]
-        public static IQueryable<Contrato> GetContratos(ApartaPlusContext dbContext) => dbContext.Contratos;
+        [UseSorting]
+        public static IQueryable<Contrato> GetContratos(ApartaPlusContext dbContext) => 
+            dbContext.Contratos;
 
         [UseOffsetPaging]
-        [UseSorting]
+        [UseProjection]
         [UseFiltering]
-        public static IQueryable<Inquilino> GetInquilinos(ApartaPlusContext dbContext) => dbContext.Inquilinos;
+        [UseSorting]
+        public static IQueryable<Inquilino> GetInquilinos(ApartaPlusContext dbContext) => 
+            dbContext.Inquilinos;
 
         [UseOffsetPaging]
-        [UseSorting]
+        [UseProjection]
         [UseFiltering]
-        public static IQueryable<Propiedad> GetPropiedads(ApartaPlusContext dbContext) => dbContext.Propiedads;
+        [UseSorting]
+        public static IQueryable<Propiedad> GetPropiedads(ApartaPlusContext dbContext) => 
+            dbContext.Propiedads;
 
         public static async Task<DashboardStatisticsDTO> GetDashboardStatistics(
-        Guid userId,
-        [Service] DashboardStatisticsService dashboardService)
-    {
-        return await dashboardService.GetDashboardStatisticsAsync(userId);
-    }
-        
-       
+            Guid userId,
+            [Service] DashboardStatisticsService dashboardService)
+        {
+            return await dashboardService.GetDashboardStatisticsAsync(userId);
+        }
     }
 }
