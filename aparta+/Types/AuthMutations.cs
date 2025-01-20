@@ -80,6 +80,11 @@ namespace aparta_.Types
             return await authRepository.IsUserConfirmedAsync(email);
         }
 
+        public async Task<string> ResendVerificationCode(string email, [Service] IAuthRepository authRepository)
+        {
+            return await authRepository.ResendVerificationCodeAsync(email);
+        }
+
     }
 
 }

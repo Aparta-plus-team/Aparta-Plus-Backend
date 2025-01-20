@@ -17,6 +17,7 @@ namespace data_aparta_.Repos.Contracts
         Task<UpdateEmailResponse> UpdateEmailAsync(string newEmail, string accessToken);
         Task<bool> ConfirmEmailUpdateAsync(string confirmationCode, string accessToken);
         Task<bool> IsUserConfirmedAsync(string email);
+        Task<string> ResendVerificationCodeAsync(string email);
 
 
 

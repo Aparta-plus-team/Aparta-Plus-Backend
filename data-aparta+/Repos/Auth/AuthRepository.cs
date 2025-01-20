@@ -243,6 +243,26 @@ namespace data_aparta_.Repos.Auth
                 throw new Exception($"Error checking user confirmation status: {ex.Message}");
             }
         }
+
+        public async Task<string> ResendVerificationCodeAsync(string email)
+        {
+            try
+            {
+                var request = new ResendConfirmationCodeRequest
+                {
+                    ClientId = _userPool.ClientID,
+                    Username = email,
+                    SecretHash = CalculateSecretHash(email)
+                };
+
+                await _cognitoClient.ResendConfirmationCodeAsync(request);
+                return "Código de verificación reenviado";
+            }
+            catch (AmazonCognitoIdentityProviderException ex)
+            {
+                throw new Exception($"Error resending verification code: {ex.Message}");
+            }
+        }
     }
     }
 
