@@ -79,29 +79,78 @@ namespace data_aparta_.Repos.Auth
             }
         }
 
-        public async Task<string> LoginUserAsync(LoginInput loginRequest)
+        public async Task<LoginResponse> LoginUserAsync(LoginInput loginRequest)
         {
-            var user = new CognitoUser(
-                loginRequest.Email,
-                _userPool.ClientID,
-                _userPool,
-                _cognitoClient,
-                _clientSecret
-            );
-
             try
             {
-                var authRequest = new InitiateSrpAuthRequest()
+                // Primero verificamos si el usuario está confirmado
+                bool isConfirmed = await IsUserConfirmedAsync(loginRequest.Email);
+                if (!isConfirmed)
                 {
-                    Password = loginRequest.Password
-                };
+                    return new LoginResponse
+                    {
+                        Success = false,
+                        Message = "Usuario no verificado. Por favor, verifique su cuenta con el código enviado a su correo electrónico.",
+                        Status = LoginStatus.UnverifiedUser,
+                        Token = null
+                    };
+                }
 
-                var authResponse = await user.StartWithSrpAuthAsync(authRequest);
-                return authResponse.AuthenticationResult.IdToken;
+                var user = new CognitoUser(
+                    loginRequest.Email,
+                    _userPool.ClientID,
+                    _userPool,
+                    _cognitoClient,
+                    _clientSecret
+                );
+
+                try
+                {
+                    var authRequest = new InitiateSrpAuthRequest()
+                    {
+                        Password = loginRequest.Password
+                    };
+
+                    var authResponse = await user.StartWithSrpAuthAsync(authRequest);
+
+                    return new LoginResponse
+                    {
+                        Success = true,
+                        Message = "Inicio de sesión exitoso",
+                        Status = LoginStatus.Success,
+                        Token = authResponse.AuthenticationResult.IdToken
+                    };
+                }
+                catch (NotAuthorizedException)
+                {
+                    return new LoginResponse
+                    {
+                        Success = false,
+                        Message = "Credenciales incorrectas. Por favor, verifique su email y contraseña.",
+                        Status = LoginStatus.InvalidCredentials,
+                        Token = null
+                    };
+                }
+                catch (UserNotConfirmedException)
+                {
+                    return new LoginResponse
+                    {
+                        Success = false,
+                        Message = "Usuario no verificado. Por favor, verifique su cuenta con el código enviado a su correo electrónico.",
+                        Status = LoginStatus.UnverifiedUser,
+                        Token = null
+                    };
+                }
             }
             catch (AmazonCognitoIdentityProviderException ex)
             {
-                throw new Exception($"Error logging in: {ex.Message}");
+                return new LoginResponse
+                {
+                    Success = false,
+                    Message = $"Error durante el inicio de sesión: {ex.Message}",
+                    Status = LoginStatus.Error,
+                    Token = null
+                };
             }
         }
 

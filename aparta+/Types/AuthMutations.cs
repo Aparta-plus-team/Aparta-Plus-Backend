@@ -42,7 +42,7 @@ namespace aparta_.Types
             return "User confirmed successfully";
         }
 
-        public async Task<string> LoginUser(LoginInput input, [Service] IAuthRepository authRepository)
+        public async Task<LoginResponse> LoginUser(LoginInput input, [Service] IAuthRepository authRepository)
         {
             return await authRepository.LoginUserAsync(input);
         }

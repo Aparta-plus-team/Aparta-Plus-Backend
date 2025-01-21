@@ -19,4 +19,21 @@ namespace data_aparta_.DTOs
         public string PhoneNumber { get; set; }
         public string UserId { get; set; }
     }
+
+    public class LoginResponse
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; }
+        public LoginStatus Status { get; set; }
+        public string Token { get; set; }
+    }
+
+    public enum LoginStatus
+    {
+        Success,
+        UnverifiedUser,
+        InvalidCredentials,
+        Error
+    }
+
 }
