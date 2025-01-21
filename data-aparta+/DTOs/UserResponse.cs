@@ -25,7 +25,7 @@ namespace data_aparta_.DTOs
         public bool Success { get; set; }
         public string Message { get; set; }
         public LoginStatus Status { get; set; }
-        public string Token { get; set; }
+        public string? Token { get; set; }
     }
 
     public enum LoginStatus
