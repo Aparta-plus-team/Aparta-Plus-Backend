@@ -53,5 +53,28 @@ namespace aparta_.Types
                 throw new GraphQLException(e.Message);
             }
         }
+
+        public async Task<PaymentStatusResponse> GetPaymentStatus(string inmuebleId)
+        {
+            try
+            {
+                return await _paymentRepository.GetPaymentStatus(inmuebleId);
+            }
+            catch (Exception e)
+            {
+                throw new GraphQLException(e.Message);
+            }
+        }
+        public async Task<ManualPaymentResponse> ManualPayment(ManualPaymentRequest input)
+        {
+            try
+            {
+                return await _paymentRepository.ProcessManualPayment(input);
+            }
+            catch (Exception e)
+            {
+                throw new GraphQLException(e.Message);
+            }
+        }
 }
 }

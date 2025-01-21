@@ -11,5 +11,7 @@ namespace data_aparta_.Repos.Contracts
     {
         Task<StripeSessionResponse> CreatePaymentSession(int quantity, string inmuebleId);
         Task<bool> ProcessPayment(string sessionId);
+        Task<PaymentStatusResponse> GetPaymentStatus(string inmuebleId);
+        Task<ManualPaymentResponse> ProcessManualPayment(ManualPaymentRequest request);
     }
 }

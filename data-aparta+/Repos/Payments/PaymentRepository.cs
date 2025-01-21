@@ -107,6 +107,7 @@ namespace data_aparta_.Repos.Payments
 
                 var delayedInvoices = await _context.Facturas.Where(f => f.Inmuebleid == invoice.Inmuebleid && f.Estado == "No Pagado")
                     .ToListAsync();
+
                 foreach (var delayed in delayedInvoices)
                 {
                     delayed.Estado = "Cancelado";
@@ -119,6 +120,192 @@ namespace data_aparta_.Repos.Payments
             return true;
         }
 
+        public async Task<decimal> CalcularDeudaTotal(string inmuebleId)
+        {
+            var inmueble = await _context.Inmuebles
+                .Include(i => i.Contrato)
+                .FirstOrDefaultAsync(i => i.Inmuebleid == Guid.Parse(inmuebleId));
+
+            if (inmueble == null || inmueble.Contrato == null)
+            {
+                throw new Exception("Inmueble o contrato no encontrado");
+            }
+
+            // Obtener facturas pendientes y atrasadas
+            var facturasPendientes = await _context.Facturas
+                .Where(f => f.Inmuebleid == Guid.Parse(inmuebleId) &&
+                       (f.Estado == "No Pagado" || f.Estado == "Pendiente" || f.Estado == "Atrasado"))
+                .OrderBy(f => f.Fechapago)
+                .ToListAsync();
+
+            decimal deudaTotal = 0;
+
+            foreach (var factura in facturasPendientes)
+            {
+                decimal montoFactura = factura.Monto ?? 0;
+
+                // Agregar mora si la factura está atrasada
+                if (factura.Estado == "Atrasado")
+                {
+                    var porcentajeMora = inmueble.Contrato.Mora ?? 2;
+                    montoFactura += montoFactura * (porcentajeMora / 100);
+                }
+
+                deudaTotal += montoFactura;
+            }
+
+            // Si no hay deuda pero el mes actual está pendiente, agregar el monto del alquiler
+            if (deudaTotal == 0)
+            {
+                var facturaActual = await _context.Facturas
+                    .AnyAsync(f => f.Inmuebleid == Guid.Parse(inmuebleId) &&
+                           (f.Estado == "Pagado" || f.Estado == "Por Adelantado") &&
+                           f.Fechapago.Value.Month == DateTime.Now.Month &&
+                           f.Fechapago.Value.Year == DateTime.Now.Year);
+
+                if (!facturaActual)
+                {
+                    deudaTotal = inmueble.Contrato.Precioalquiler ?? 0;
+
+                    // Si ya pasó el día de pago, agregar mora
+                    if (DateTime.Now.Day > inmueble.Contrato.Diapago)
+                    {
+                        var porcentajeMora = inmueble.Contrato.Mora ?? 2;
+                        deudaTotal += deudaTotal * (porcentajeMora / 100);
+                    }
+                }
+            }
+
+            return deudaTotal;
+        }
+
+        public async Task<PaymentStatusResponse> GetPaymentStatus(string inmuebleId)
+        {
+            var response = new PaymentStatusResponse();
+            var contract = await GetContract(inmuebleId);
+
+            if (contract == null)
+            {
+                throw new Exception("No se encontró contrato para este inmueble");
+            }
+
+            // Verificar si ya pagó el mes actual
+            response.IsCurrentMonthPaid = await CheckPaid(inmuebleId);
+
+            // Verificar si tiene factura pendiente del mes actual
+            var currentMonthPending = await _context.Facturas
+                .AnyAsync(f => f.Inmuebleid == Guid.Parse(inmuebleId)
+                    && f.Estado == "Pendiente"
+                    && f.Fechapago.Value.Month == DateTime.Now.Month
+                    && f.Fechapago.Value.Year == DateTime.Now.Year);
+
+            response.HasPendingCurrentMonth = currentMonthPending;
+
+            // Verificar deudas
+            var debts = await _context.Facturas
+                .Where(f => f.Inmuebleid == Guid.Parse(inmuebleId)
+                    && f.Estado == "No Pagado")
+                .ToListAsync();
+
+            response.HasDebt = debts.Any();
+            if (response.HasDebt)
+            {
+                response.DebtMonths = debts.Count;
+                response.DebtAmount = debts.Sum(d => d.Monto ?? 0);
+
+                // Calcular el monto total incluyendo la mora
+                decimal moraPercentage = contract.Mora ?? 2;
+                response.DebtAmount += response.DebtAmount * (moraPercentage / 100);
+            }
+
+            // Verificar si tendrá mora
+            response.WillHaveMora = await IsInMora(contract, inmuebleId);
+            if (response.WillHaveMora)
+            {
+                response.MoraAmount = await CalculateMora(contract, inmuebleId);
+            }
+
+            return response;
+        }
+
+
+        public async Task<ManualPaymentResponse> ProcessManualPayment(ManualPaymentRequest request)
+        {
+            var deudaTotal = await CalcularDeudaTotal(request.InmuebleId);
+
+            if (deudaTotal == 0)
+            {
+                return new ManualPaymentResponse
+                {
+                    Success = false,
+                    DeudaTotal = 0,
+                    Message = "No hay deuda pendiente para este inmueble"
+                };
+            }
+
+            if (request.MontoRecibido != deudaTotal)
+            {
+                return new ManualPaymentResponse
+                {
+                    Success = false,
+                    DeudaTotal = deudaTotal,
+                    Message = $"El monto recibido ({request.MontoRecibido:C2}) no coincide con la deuda total ({deudaTotal:C2})"
+                };
+            }
+
+            var inmueble = await _context.Inmuebles
+                .Include(i => i.Contrato)
+                    .ThenInclude(c => c.Inquilino)
+                .FirstOrDefaultAsync(i => i.Inmuebleid == Guid.Parse(request.InmuebleId));
+
+            var facturasPendientes = await _context.Facturas
+                .Where(f => f.Inmuebleid == Guid.Parse(request.InmuebleId) &&
+                       (f.Estado == "No Pagado" || f.Estado == "Pendiente" || f.Estado == "Atrasado"))
+                .OrderBy(f => f.Fechapago)
+                .ToListAsync();
+
+            // Si no hay facturas pendientes pero hay deuda, crear la factura del mes actual
+            if (!facturasPendientes.Any() && deudaTotal > 0)
+            {
+                var nuevaFactura = new Factura
+                {
+                    Facturaid = Guid.NewGuid(),
+                    Inmuebleid = Guid.Parse(request.InmuebleId),
+                    Monto = deudaTotal,
+                    Estado = "Pagado",
+                    Fechapago = DateOnly.FromDateTime(DateTime.Now),
+                    Descripcion = request.Descripcion,
+                    Inmueble = inmueble
+                };
+
+                await _context.Facturas.AddAsync(nuevaFactura);
+                facturasPendientes = new List<Factura> { nuevaFactura };
+            }
+            else
+            {
+                // Marcar todas las facturas pendientes como pagadas
+                foreach (var factura in facturasPendientes)
+                {
+                    factura.Estado = "Pagado";
+                    factura.Descripcion = request.Descripcion;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            // Enviar correo de confirmación
+            await emailService.EnviarFacturasAsync(
+                inmueble.Contrato.Inquilino.Inquilinocorreo,
+                facturasPendientes
+            );
+
+            return new ManualPaymentResponse
+            {
+                Success = true,
+                DeudaTotal = deudaTotal,
+                Message = "Pago procesado exitosamente"
+            };
+        }
 
         #region Private Methods
         private async Task<bool> IsInDebt(string inmuebleId)
@@ -144,19 +331,6 @@ namespace data_aparta_.Repos.Payments
                 return true;
             }
             return false;
-            // Ver si hay deudas asociadas al contrato
-           
-            /*var debts = await _context.Facturas.Where(f => f.Inmuebleid == Guid.Parse(inmuebleId) && f.Estado == "Atrasado").ToListAsync();
-            DateTime fechaPago = new DateTime(DateTime.Now.Year, DateTime.Now.Month, contract.Diapago ?? 15);
-
-            foreach (var debt in debts)
-            {
-                if (DateTime.Now.AddDays(5) > fechaPago) //Agregar dias de penalizacion en la DB
-                {
-                    return true;
-                }
-            }
-            return false;*/
         }
 
         private async Task<Contrato> GetContract(string inmuebleId)
