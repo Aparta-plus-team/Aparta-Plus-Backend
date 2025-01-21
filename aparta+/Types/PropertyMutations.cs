@@ -116,5 +116,69 @@ namespace aparta_.Types
                 throw new GraphQLException($"Error al eliminar la propiedad: {ex.Message}");
             }
         }
+
+        // Eliminar portrait
+        public async Task<bool> DeletePortrait(string propertyId)
+        {
+            if (string.IsNullOrEmpty(propertyId))
+            {
+                throw new GraphQLException("El ID de la propiedad es obligatorio.");
+            }
+
+            try
+            {
+                return await propertyRepository.DeletePortrait(propertyId);
+            }
+            catch (Exception ex)
+            {
+                throw new GraphQLException($"Error al eliminar el portrait: {ex.Message}");
+            }
+        }
+
+        // Subir imágenes
+        public async Task<FileUploadResponse> UploadImages(IFile file, string propertyId)
+        {
+            if (file == null)
+            {
+                throw new GraphQLException("No se ha proporcionado un archivo.");
+            }
+
+            if (string.IsNullOrEmpty(propertyId))
+            {
+                throw new GraphQLException("El ID de la propiedad es obligatorio.");
+            }
+
+            try
+            {
+                return await propertyRepository.UploadImages(new FileUploadInput
+                {
+                    File = file,
+                    Type = "image",
+                    PropertyId = propertyId
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new GraphQLException($"Error al subir las imágenes: {ex.Message}");
+            }
+        }
+
+        // Eliminar imagen
+        public async Task<bool> DeleteImage(string imageId)
+        {
+            if (string.IsNullOrEmpty(imageId))
+            {
+                throw new GraphQLException("El ID de la imagen es obligatorio.");
+            }
+
+            try
+            {
+                return await propertyRepository.DeleteImage(imageId);
+            }
+            catch (Exception ex)
+            {
+                throw new GraphQLException($"Error al eliminar la imagen: {ex.Message}");
+            }
+        }
     }
 }

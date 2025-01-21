@@ -19,5 +19,9 @@ namespace data_aparta_.Repos.Contracts
 
         Task<List<Propiedad>> GetPropiedadesByUsuarioId(Guid userId);
 
+        Task<bool> DeletePortrait(string propertyId);
+        Task<FileUploadResponse> UploadImages(FileUploadInput input);
+        Task<bool> DeleteImage(string imageId);
+
     }
 }
