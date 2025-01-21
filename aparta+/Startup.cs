@@ -15,6 +15,8 @@ using data_aparta_.Repos.Imuebles;
 using data_aparta_.DTOs;
 using aparta_.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Stripe;
+using data_aparta_.Repos.Payments;
 
 namespace aparta_
 {
@@ -104,9 +106,23 @@ namespace aparta_
             services.AddScoped<IContratoRepository, ContratoRepository>();
             services.AddScoped<IInmuebleRepository, InmuebleRepository>();
             services.AddScoped<IFacturaRepository, FacturaRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
 
             services.AddScoped<DashboardStatisticsService>();
+            services.AddScoped<StripeService>();
+            services.AddScoped<EmailService>();
+            services.AddScoped<InvoiceRepository>();
             services.AddScoped<S3Uploader>();
+
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureStripe(this IServiceCollection services, IConfiguration configuration)
+        {
+            var stripeApiKey = configuration["Stripe:ApiKey"];
+            StripeConfiguration.ApiKey = stripeApiKey;
+            services.Configure<StripeOptions>(configuration.GetSection("Stripe"));
 
             return services;
         }

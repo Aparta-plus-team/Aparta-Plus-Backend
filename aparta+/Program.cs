@@ -7,7 +7,10 @@ builder.Services
     .SetupEntityFrameworkCore(builder.Configuration)
     .ConfugureAWS(builder.Configuration)
     .SetupGraphQL()
-    .SetupCors();
+    .SetupCors()
+    .ConfugureAWS(builder.Configuration)
+.ConfigureStripe(builder.Configuration);
+
 
 
 var app = builder.Build();
