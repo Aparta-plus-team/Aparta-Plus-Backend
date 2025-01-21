@@ -104,7 +104,7 @@ namespace aparta_
             services.AddScoped<IContratoRepository, ContratoRepository>();
             services.AddScoped<IInmuebleRepository, InmuebleRepository>();
             services.AddScoped<IFacturaRepository, FacturaRepository>();
-
+            services.AddScoped<ReporteMorosidadRepository>();
             services.AddScoped<DashboardStatisticsService>();
             services.AddScoped<S3Uploader>();
 

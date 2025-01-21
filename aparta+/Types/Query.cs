@@ -3,6 +3,7 @@ using data_aparta_.Context;
 using data_aparta_.DTOs;
 using data_aparta_.Models;
 using HotChocolate.Data;
+using data_aparta_.Repos;
 
 namespace aparta_.Types
 {
@@ -16,43 +17,55 @@ namespace aparta_.Types
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public static async Task<IQueryable<Factura>> GetFacturas(ApartaPlusContext dbContext) => 
+        public static async Task<IQueryable<Factura>> GetFacturas(ApartaPlusContext dbContext) =>
             dbContext.Facturas;
 
         [UseOffsetPaging]
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public static async Task<IQueryable<Usuario>> GetUsuarios(ApartaPlusContext dbContext) => 
+        public static async Task<IQueryable<Usuario>> GetUsuarios(ApartaPlusContext dbContext) =>
             dbContext.Usuarios;
 
         [UseOffsetPaging]
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public static IQueryable<Inmueble> GetInmuebles(ApartaPlusContext dbContext) => 
+        public static IQueryable<Inmueble> GetInmuebles(ApartaPlusContext dbContext) =>
             dbContext.Inmuebles;
 
         [UseOffsetPaging]
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public static IQueryable<Contrato> GetContratos(ApartaPlusContext dbContext) => 
+        public static IQueryable<Contrato> GetContratos(ApartaPlusContext dbContext) =>
             dbContext.Contratos;
 
         [UseOffsetPaging]
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public static IQueryable<Inquilino> GetInquilinos(ApartaPlusContext dbContext) => 
+        public static IQueryable<Inquilino> GetInquilinos(ApartaPlusContext dbContext) =>
             dbContext.Inquilinos;
 
         [UseOffsetPaging]
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public static IQueryable<Propiedad> GetPropiedads(ApartaPlusContext dbContext) => 
+        public static IQueryable<Propiedad> GetPropiedads(ApartaPlusContext dbContext) =>
             dbContext.Propiedads;
+
+        [UseOffsetPaging]
+        [UseProjection]
+        [UseFiltering]
+        [UseSorting]
+        public static async Task<List<ReporteMorosidadDto>> GetReporteMorosidadPorAnio(
+            int anio,
+            Guid userId,
+            [Service] ReporteMorosidadRepository reporteMorosidadRepository)
+        {
+            return await reporteMorosidadRepository.GetReporteMorosidadPorUsuarioYAnioAsync(userId ,anio);
+        }
 
         public static async Task<DashboardStatisticsDTO> GetDashboardStatistics(
             Guid userId,
@@ -60,5 +73,6 @@ namespace aparta_.Types
         {
             return await dashboardService.GetDashboardStatisticsAsync(userId);
         }
+
     }
 }
