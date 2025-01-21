@@ -62,7 +62,7 @@ namespace data_aparta_.Repos.Payments
         }
 
 
-        public async Task<List<Factura>> CreateInvoicesInAdvanced(int monthAmount, string inmuebleId, string sessionId, string url)
+        public async Task<List<Factura>> CreateInvoicesInAdvanced(int monthAmount, string inmuebleId, string sessionId, string url, string desc)
         {
             var invoices = new List<Factura>();
             var property = await _context.Inmuebles.Include(x => x.Contrato).FirstOrDefaultAsync(x => x.Inmuebleid == Guid.Parse(inmuebleId));
@@ -77,7 +77,8 @@ namespace data_aparta_.Repos.Payments
                     Inmuebleid = property.Inmuebleid,
                     Monto = property.Contrato.Precioalquiler,
                     Fechapago = DateOnly.FromDateTime(DateTime.Now.AddMonths(i)),
-                    Estado = "Pendiente Adelanto" 
+                    Estado = "Pendiente Adelanto",
+                    Descripcion = desc
                 };
 
                 invoices.Add(invoice);
@@ -89,7 +90,7 @@ namespace data_aparta_.Repos.Payments
         }
 
 
-        public async Task<Factura> CreateInvoice(string inmuebleId, string sessionId, string url, decimal price)
+        public async Task<Factura> CreateInvoice(string inmuebleId, string sessionId, string url, decimal price, string desc)
         {
             var property = await _context.Inmuebles.Include(x => x.Contrato).FirstOrDefaultAsync(x => x.Inmuebleid == Guid.Parse(inmuebleId));
 
@@ -101,7 +102,8 @@ namespace data_aparta_.Repos.Payments
                 Inmuebleid = property.Inmuebleid,
                 Monto = price,
                 Fechapago = DateOnly.FromDateTime(DateTime.Now),
-                Estado = "Pendiente"
+                Estado = "Pendiente",
+                Descripcion = desc
             };
 
             _context.Facturas.Add(invoice);

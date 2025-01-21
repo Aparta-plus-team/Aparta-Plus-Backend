@@ -19,5 +19,7 @@ public partial class Factura
 
     public string? SessionId { get; set; }
 
+    public string? Descripcion { get; set; }
+
     public virtual Inmueble? Inmueble { get; set; }
 }

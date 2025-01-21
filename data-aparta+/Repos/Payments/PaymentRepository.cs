@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,11 +18,13 @@ namespace data_aparta_.Repos.Payments
     {
 
         private readonly StripeService _stripeService;
+        private readonly EmailService emailService;
         private readonly ApartaPlusContext _context;
 
-        public PaymentRepository(StripeService stripeService, ApartaPlusContext apartaPlusContext) { 
+        public PaymentRepository(StripeService stripeService, ApartaPlusContext apartaPlusContext, EmailService email) { 
             _stripeService = stripeService;
             _context = apartaPlusContext;
+            emailService = email;
         }
 
         public async Task<StripeSessionResponse> CreatePaymentSession(int quantity, string inmuebleId)
@@ -78,6 +81,7 @@ namespace data_aparta_.Repos.Payments
             var invoices = await _context.Facturas.Where(f => f.SessionId == sessionId)
                 .Include(f => f.Inmueble)
                 .Include(f => f.Inmueble.Contrato)
+                .Include(f => f.Inmueble.Contrato.Inquilino)
                 .ToListAsync();
 
             Console.WriteLine(invoices);
@@ -109,6 +113,8 @@ namespace data_aparta_.Repos.Payments
                 }
                 await _context.SaveChangesAsync();
             }
+            await emailService.EnviarFacturasAsync(invoices.FirstOrDefault().Inmueble.Contrato.Inquilino.Inquilinocorreo, invoices);
+
             // Procesar el pago
             return true;
         }

@@ -74,6 +74,9 @@ public partial class ApartaPlusContext : DbContext
             entity.Property(e => e.Facturaid)
                 .ValueGeneratedNever()
                 .HasColumnName("facturaid");
+            entity.Property(e => e.Descripcion)
+                .HasColumnType("character varying")
+                .HasColumnName("descripcion");
             entity.Property(e => e.Estado)
                 .HasMaxLength(50)
                 .HasColumnName("estado");
