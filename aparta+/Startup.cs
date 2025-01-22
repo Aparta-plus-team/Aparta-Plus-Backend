@@ -116,7 +116,9 @@ namespace aparta_
             services.AddScoped<S3Uploader>();
             services.AddScoped<ReportesRepository>();
             services.AddScoped<ReporteVentasRepository>();
-            services.AddScoped<GananciaInmuebleRepository>();
+            services.AddScoped<GananciaPropiedadRepository>();
+            services.AddScoped<InquilinoDeudaRepository>();
+            services.AddScoped<EstadisticaFinancieraRepository>();
 
             return services;
         }

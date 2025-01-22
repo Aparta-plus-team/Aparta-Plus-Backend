@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace data_aparta_.Repos
 {
-    public class ReporteVentasRepository : IAsyncDisposable
+    public class GananciaPropiedadRepository : IAsyncDisposable
     {
         private readonly IDbContextFactory<ApartaPlusContext> _contextFactory;
         private ApartaPlusContext? _context;
 
-        public ReporteVentasRepository(IDbContextFactory<ApartaPlusContext> contextFactory)
+        public GananciaPropiedadRepository(IDbContextFactory<ApartaPlusContext> contextFactory)
         {
             _contextFactory = contextFactory;
         }
@@ -30,24 +30,23 @@ namespace data_aparta_.Repos
             }
         }
 
-        public async Task<List<ReporteVentasDto>> GetReporteVentasAnual(Guid userId, int year)
+        public async Task<List<GananciaPropiedadDto>> GetGananciaPorPropiedad(Guid userId)
         {
             using var context = _contextFactory.CreateDbContext();
 
             var resultado = await context.Facturas
                 .Include(f => f.Inmueble)
                 .ThenInclude(i => i.Propiedad)
-                .Where(f => f.Fechapago.HasValue &&
-                            f.Fechapago.Value.Year == year && // Filtra por el año de FechaPago
-                            f.Inmueble.Propiedad.Usuarioid == userId && // Filtra por UsuarioId
-                            (f.Estado == "Pagado" || f.Estado == "Por Adelantado")) // Filtra por estado
-                .GroupBy(f => f.Fechapago.Value.Month) // Agrupa por mes
-                .Select(g => new ReporteVentasDto
+                .Where(f => f.Inmueble.Propiedad.Usuarioid == userId && // Filtra por UsuarioId
+                            (f.Estado == "Pagado" || f.Estado == "Por Adelantado")) // Filtra por estados válidos
+                .GroupBy(f => new { f.Inmueble.Propiedad.Propiedadid, f.Inmueble.Propiedad.Nombre })
+                .Select(g => new GananciaPropiedadDto
                 {
-                    Mes = g.Key, // El mes del grupo
-                    Ganancia = g.Sum(f => f.Monto ?? 0) // Suma los montos solo de facturas válidas
+                    PropiedadId = g.Key.Propiedadid,
+                    NombrePropiedad = g.Key.Nombre,
+                    Ganancia = g.Sum(f => f.Monto ?? 0) // Calcula la suma solo de facturas válidas
                 })
-                .OrderBy(r => r.Mes) // Ordena por mes
+                .OrderByDescending(r => r.Ganancia)
                 .ToListAsync();
 
             return resultado;
