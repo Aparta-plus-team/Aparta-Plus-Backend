@@ -84,13 +84,12 @@ namespace aparta_.Types
         return await repository.GetReporteVentasAnual(userId, year);
     }
 
-        // // Query para Ganancia por Inmueble
-        // public static async Task<List<GananciaInmuebleDto>> GetGananciaPorInmueble(
-        //     Guid userId,
-        //     int year,
-        //     [Service] GananciaInmuebleRepository gananciaInmuebleRepository)
-        // {
-        //     return await gananciaInmuebleRepository.GetGananciaPorInmueble(userId, year);
-        // }
+        // Query para Ganancia por Inmueble
+        public static async Task<List<GananciaInmuebleDto>> GetGananciaPorInmueble(
+            Guid userId,
+            [Service] GananciaInmuebleRepository gananciaInmuebleRepository)
+        {
+            return await gananciaInmuebleRepository.GetGananciaPorInmueble(userId);
+        }
     }
 }
