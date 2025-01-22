@@ -39,19 +39,19 @@ namespace data_aparta_.Repos
                 .ThenInclude(i => i.Propiedad)
                 .Where(f => f.Fechapago.HasValue &&
                             f.Fechapago.Value.Year == year && // Filtra por el año de FechaPago
-                            f.Inmueble.Propiedad.Usuarioid == userId) // Filtra por UsuarioId
+                            f.Inmueble.Propiedad.Usuarioid == userId && // Filtra por UsuarioId
+                            (f.Estado == "Pagado" || f.Estado == "Por Adelantado")) // Filtra por estado
                 .GroupBy(f => f.Fechapago.Value.Month) // Agrupa por mes
                 .Select(g => new ReporteVentasDto
                 {
                     Mes = g.Key, // El mes del grupo
-                    Ganancia = g.Sum(f => f.Monto ?? 0) // Suma los montos
+                    Ganancia = g.Sum(f => f.Monto ?? 0) // Suma los montos solo de facturas válidas
                 })
                 .OrderBy(r => r.Mes) // Ordena por mes
                 .ToListAsync();
 
             return resultado;
         }
-
 
         public async ValueTask DisposeAsync()
         {

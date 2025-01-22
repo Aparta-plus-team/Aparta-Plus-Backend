@@ -31,25 +31,26 @@ namespace data_aparta_.Repos
         }
 
         public async Task<List<GananciaInmuebleDto>> GetGananciaPorInmueble(Guid userId)
-{
-    using var context = _contextFactory.CreateDbContext();
-
-    var resultado = await context.Facturas
-        .Include(f => f.Inmueble)
-        .ThenInclude(i => i.Propiedad)
-        .Where(f => f.Inmueble.Propiedad.Usuarioid == userId) // Filtro solo por UsuarioId
-        .GroupBy(f => new { f.Inmueble.Inmuebleid, f.Inmueble.Codigo })
-        .Select(g => new GananciaInmuebleDto
         {
-            InmuebleId = g.Key.Inmuebleid,
-            CodigoInmueble = g.Key.Codigo,
-            Ganancia = g.Sum(f => f.Monto ?? 0)
-        })
-        .OrderByDescending(r => r.Ganancia)
-        .ToListAsync();
+            using var context = _contextFactory.CreateDbContext();
 
-    return resultado;
-}
+            var resultado = await context.Facturas
+                .Include(f => f.Inmueble)
+                .ThenInclude(i => i.Propiedad)
+                .Where(f => f.Inmueble.Propiedad.Usuarioid == userId && // Filtra por UsuarioId
+                            (f.Estado == "Pagado" || f.Estado == "Por Adelantado")) // Filtra por estados válidos
+                .GroupBy(f => new { f.Inmueble.Inmuebleid, f.Inmueble.Codigo })
+                .Select(g => new GananciaInmuebleDto
+                {
+                    InmuebleId = g.Key.Inmuebleid,
+                    CodigoInmueble = g.Key.Codigo,
+                    Ganancia = g.Sum(f => f.Monto ?? 0) // Calcula la suma solo de facturas válidas
+                })
+                .OrderByDescending(r => r.Ganancia)
+                .ToListAsync();
+
+            return resultado;
+        }
 
         public async ValueTask DisposeAsync()
         {
