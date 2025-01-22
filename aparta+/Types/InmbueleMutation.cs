@@ -8,44 +8,39 @@ namespace aparta_.GraphQL
     public class InmuebleMutation
     {
         // Crear un nuevo inmueble
-        public async Task<Inmueble> CreateInmueble(
-            string codigo,
-            DateTime fechaCreacion,
-            bool ocupacion,
-            bool tieneParqueo,
-            int numBanos,
-            int numHabitaciones,
-            Guid? propiedadId,
-            Guid? contratoId,
-            [Service] IInmuebleRepository inmuebleRepository)
-        {
-            var inmueble = new Inmueble
-            {
-                Inmuebleid = Guid.NewGuid(),
-                Codigo = codigo,
-                Fechacreacion = DateOnly.FromDateTime(fechaCreacion),
-                Ocupacion = ocupacion,
-                Tieneparqueo = tieneParqueo,
-                Numbanos = numBanos,
-                Numhabitaciones = numHabitaciones,
-                Propiedadid = propiedadId,
-                Contratoid = contratoId
-            };
+public async Task<Inmueble> CreateInmueble(
+    string codigo,
+    bool? ocupacion, // Cambiado a nullable
+    bool tieneParqueo,
+    int numBanos,
+    int numHabitaciones,
+    Guid? propiedadId,
+    Guid? contratoId,
+    [Service] IInmuebleRepository inmuebleRepository)
+{
+    Console.WriteLine("Iniciando mutación CreateInmueble...");
 
-            // Validación opcional
-            if (contratoId.HasValue)
-            {
-                // Si contratoId se proporciona, asegúrate de que exista un contrato
-                var contrato = await inmuebleRepository.GetInmuebleByIdAsync(contratoId.Value);
-                if (contrato == null)
-                {
-                    throw new GraphQLException($"El contrato con ID {contratoId} no existe.");
-                }
-            }
+    var inmueble = new Inmueble
+    {
+        Inmuebleid = Guid.NewGuid(),
+        Codigo = codigo,
+        Fechacreacion = DateOnly.FromDateTime(DateTime.Now),
+        Ocupacion = ocupacion ?? false, // Asigna un valor por defecto si es null
+        Tieneparqueo = tieneParqueo,
+        Numbanos = numBanos,
+        Numhabitaciones = numHabitaciones,
+        Propiedadid = propiedadId,
+        Contratoid = contratoId
+    };
 
-            await inmuebleRepository.AddInmuebleAsync(inmueble);
-            return inmueble;
-        }
+    Console.WriteLine($"Creando inmueble con ID: {inmueble.Inmuebleid}");
+
+    await inmuebleRepository.AddInmuebleAsync(inmueble);
+
+    Console.WriteLine("Inmueble creado exitosamente.");
+    return inmueble;
+}
+
 
         // Actualizar un inmueble existente
         public async Task<Inmueble> UpdateInmueble(

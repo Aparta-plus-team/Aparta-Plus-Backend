@@ -62,9 +62,10 @@ namespace aparta_.Types
         public static async Task<List<ReporteMorosidadDto>> GetReporteMorosidadPorAnio(
             int anio,
             Guid userId,
+            Guid? propertyId,
             [Service] ReporteMorosidadRepository reporteMorosidadRepository)
         {
-            return await reporteMorosidadRepository.GetReporteMorosidadPorUsuarioYAnioAsync(userId ,anio);
+            return await reporteMorosidadRepository.GetReporteMorosidadPorUsuarioPropiedadYAnioAsync(userId, propertyId, anio);
         }
 
         public static async Task<DashboardStatisticsDTO> GetDashboardStatistics(
@@ -74,5 +75,22 @@ namespace aparta_.Types
             return await dashboardService.GetDashboardStatisticsAsync(userId);
         }
 
+        // Query para Reporte de Ventas Anual
+        public static async Task<List<ReporteVentasDto>> GetReporteVentasAsync(
+        [Service] ReporteVentasRepository repository,
+        Guid userId, 
+        int year)
+    {
+        return await repository.GetReporteVentasAnual(userId, year);
+    }
+
+        // // Query para Ganancia por Inmueble
+        // public static async Task<List<GananciaInmuebleDto>> GetGananciaPorInmueble(
+        //     Guid userId,
+        //     int year,
+        //     [Service] GananciaInmuebleRepository gananciaInmuebleRepository)
+        // {
+        //     return await gananciaInmuebleRepository.GetGananciaPorInmueble(userId, year);
+        // }
     }
 }
