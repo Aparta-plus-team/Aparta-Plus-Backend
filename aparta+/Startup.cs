@@ -113,8 +113,8 @@ namespace aparta_
             services.AddScoped<EmailService>();
             services.AddScoped<InvoiceRepository>();
             services.AddScoped<S3Uploader>();
-
-
+            services.AddScoped<ReporteVentasRepository>();
+            services.AddScoped<GananciaInmuebleRepository>();
             return services;
         }
 
