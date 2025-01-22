@@ -11,7 +11,7 @@ namespace data_aparta_.Repos.Contracts
     {
         Task<string> RegisterUserAsync (RegisterInput registerRequest);
         Task ConfirmUserAsync(ConfirmInput confirmRequest);
-        Task<string> LoginUserAsync(LoginInput loginRequest);
+        Task<LoginResponse> LoginUserAsync(LoginInput loginRequest);
         Task ConfirmForgotPasswordAsync(ChangePasswordInput changePasswordRequest);
         Task ForgotPasswordAsync(string email);
         Task<UpdateEmailResponse> UpdateEmailAsync(string newEmail, string accessToken);

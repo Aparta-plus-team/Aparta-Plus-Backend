@@ -112,10 +112,15 @@ namespace data_aparta_.Repos.Propiedades
                 var input = new FileUploadInput
                 {
                     File = fileInput.File,
-                    Type = "contract" // o el tipo que corresponda
+                    Type = "cover" // o el tipo que corresponda
                 };
 
                 var result = await _s3Uploader.UploadFileAsync(input);
+
+                //Cambiar en la base de datos
+                var propiedad = await _context!.Propiedads.FirstOrDefaultAsync(p => p.Propiedadid == Guid.Parse(fileInput.PropertyId));
+                propiedad.Portadaurl = result.Url;
+                await _context.SaveChangesAsync();
 
                 return new FileUploadResponse
                 {
@@ -127,6 +132,71 @@ namespace data_aparta_.Repos.Propiedades
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<bool> DeletePortrait (string propertyId)
+        {
+            var propiedad = await _context!.Propiedads.FirstOrDefaultAsync(p => p.Propiedadid == Guid.Parse(propertyId));
+
+            if (propiedad == null || propiedad.Estado == false)
+                return false;
+
+            propiedad.Portadaurl = null;
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<FileUploadResponse> UploadImages(FileUploadInput input)
+        {
+            if (input.File == null)
+                throw new ArgumentException("No se ha proporcionado un archivo.");
+
+            try
+            {
+
+                var newInput = new FileUploadInput
+                {
+                    File = input.File,
+                    Type = "image" // o el tipo que corresponda
+                };
+
+                var result = await _s3Uploader.UploadFileAsync(input);
+
+                //Cambiar en la base de datos
+                Imagenespropiedade img = new Imagenespropiedade
+                {
+                    Imagenid = Guid.NewGuid(),
+                    Propiedadid = Guid.Parse(input.PropertyId),
+                    Imagenurl = result.Url,
+                    Fechacreacion = DateOnly.FromDateTime(DateTime.UtcNow),
+                    Estado = true
+                };
+
+                return new FileUploadResponse
+                {
+                    Key = result.Key,
+                    Url = result.Url
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
+        }
+
+        public async Task<bool> DeleteImage(string imageId)
+        {
+            var image = await _context!.Imagenespropiedades.FirstOrDefaultAsync(i => i.Imagenid == Guid.Parse(imageId));
+
+            if (image == null || image.Estado == false)
+                return false;
+
+            image.Estado = false;
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         // Asegura que el contexto está inicializado

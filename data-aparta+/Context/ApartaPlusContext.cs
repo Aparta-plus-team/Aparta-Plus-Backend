@@ -29,7 +29,6 @@ public partial class ApartaPlusContext : DbContext
     public virtual DbSet<Propiedad> Propiedads { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Contrato>(entity =>
@@ -75,6 +74,9 @@ public partial class ApartaPlusContext : DbContext
             entity.Property(e => e.Facturaid)
                 .ValueGeneratedNever()
                 .HasColumnName("facturaid");
+            entity.Property(e => e.Descripcion)
+                .HasColumnType("character varying")
+                .HasColumnName("descripcion");
             entity.Property(e => e.Estado)
                 .HasMaxLength(50)
                 .HasColumnName("estado");
@@ -83,6 +85,12 @@ public partial class ApartaPlusContext : DbContext
             entity.Property(e => e.Monto)
                 .HasPrecision(10, 2)
                 .HasColumnName("monto");
+            entity.Property(e => e.SessionId)
+                .HasColumnType("character varying")
+                .HasColumnName("session_id");
+            entity.Property(e => e.Url)
+                .HasColumnType("character varying")
+                .HasColumnName("url");
 
             entity.HasOne(d => d.Inmueble).WithMany(p => p.Facturas)
                 .HasForeignKey(d => d.Inmuebleid)
