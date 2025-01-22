@@ -17,6 +17,7 @@ using aparta_.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Stripe;
 using data_aparta_.Repos.Payments;
+using data_aparta_.Repos.Reportes;
 
 namespace aparta_
 {
@@ -113,8 +114,10 @@ namespace aparta_
             services.AddScoped<EmailService>();
             services.AddScoped<InvoiceRepository>();
             services.AddScoped<S3Uploader>();
+            services.AddScoped<ReportesRepository>();
             services.AddScoped<ReporteVentasRepository>();
             services.AddScoped<GananciaInmuebleRepository>();
+
             return services;
         }
 

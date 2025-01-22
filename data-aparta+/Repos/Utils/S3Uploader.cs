@@ -31,6 +31,7 @@ namespace data_aparta_.Repos.Utils
                 "contract" => "contracts",
                 "cover" => "properties/covers",
                 "property-image" => $"properties/{input.PropertyId}/images",
+                "report" => "reports",
                 _ => throw new ArgumentException("Invalid file type")
             };
 
@@ -45,6 +46,44 @@ namespace data_aparta_.Repos.Utils
                 Key = key,
                 InputStream = stream,
                 ContentType = input.File.ContentType
+            };
+
+            await _s3Client.PutObjectAsync(putRequest);
+
+            string url = $"https://{BucketName}.s3.amazonaws.com/{key}";
+
+            return new FileUploadResponse
+            {
+                Url = url,
+                Key = key
+            };
+        }
+
+        public async Task<FileUploadResponse> UploadFileFromPathAsync(string filePath, string type, string propertyId)
+        {
+            if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
+                throw new ArgumentException("El archivo especificado no existe.");
+
+            string folder = type switch
+            {
+                "contract" => "contracts",
+                "cover" => "properties/covers",
+                "property-image" => $"properties/{propertyId}/images",
+                "report" => "reports",
+                _ => throw new ArgumentException("Invalid file type")
+            };
+
+            string extension = System.IO.Path.GetExtension(filePath);
+            string fileName = $"{Guid.NewGuid()}{extension}";
+            string key = $"{folder}/{fileName}";
+
+            using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            var putRequest = new PutObjectRequest
+            {
+                BucketName = BucketName,
+                Key = key,
+                InputStream = stream,
+                ContentType = "application/pdf"
             };
 
             await _s3Client.PutObjectAsync(putRequest);
