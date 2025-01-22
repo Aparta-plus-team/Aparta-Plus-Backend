@@ -62,11 +62,11 @@ namespace data_aparta_.Repos.Utils
             // Crear facturas
             if (quantity > 1)
             {
-                var invoices = await invoiceRepository.CreateInvoicesInAdvanced(quantity, inmuebleId, response.SessionId, response.Url);
+                var invoices = await invoiceRepository.CreateInvoicesInAdvanced(quantity, inmuebleId, response.SessionId, response.Url, description);
             }
             else
             {
-                var invoice = await invoiceRepository.CreateInvoice(inmuebleId, response.SessionId, response.Url, price);
+                var invoice = await invoiceRepository.CreateInvoice(inmuebleId, response.SessionId, response.Url, price, description);
             }
 
 

@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace data_aparta_.Repos
 {
-    public class FacturaRepository : IFacturaRepository
+    public class FacturaRepository : IFacturaRepository, IAsyncDisposable
     {
         private readonly ApartaPlusContext _context;
 
-        public FacturaRepository(ApartaPlusContext context)
+        public FacturaRepository(IDbContextFactory<ApartaPlusContext> dbContextFactory)
         {
-            _context = context;
+            _context = dbContextFactory.CreateDbContext();
         }
 
         public async Task<Factura?> GetFacturaByIdAsync(Guid id)
@@ -42,6 +42,11 @@ namespace data_aparta_.Repos
                 _context.Entry(existingFactura).CurrentValues.SetValues(factura);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            return _context.DisposeAsync();
         }
     }
 }

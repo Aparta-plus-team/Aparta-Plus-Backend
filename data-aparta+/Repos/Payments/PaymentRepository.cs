@@ -14,17 +14,17 @@ using System.Threading.Tasks;
 
 namespace data_aparta_.Repos.Payments
 {
-    public class PaymentRepository : IPaymentRepository
+    public class PaymentRepository : IPaymentRepository, IAsyncDisposable
     {
 
         private readonly StripeService _stripeService;
         private readonly EmailService emailService;
         private readonly ApartaPlusContext _context;
 
-        public PaymentRepository(StripeService stripeService, ApartaPlusContext apartaPlusContext, EmailService email) { 
+        public PaymentRepository(StripeService stripeService, IDbContextFactory<ApartaPlusContext> dbContextFactory, EmailService email) { 
             _stripeService = stripeService;
-            _context = apartaPlusContext;
             emailService = email;
+            _context = dbContextFactory.CreateDbContext();
         }
 
         public async Task<StripeSessionResponse> CreatePaymentSession(int quantity, string inmuebleId)
@@ -401,6 +401,11 @@ namespace data_aparta_.Repos.Payments
 
             return result;
 
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            return _context.DisposeAsync();
         }
         #endregion
 

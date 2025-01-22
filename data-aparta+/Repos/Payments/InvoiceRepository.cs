@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace data_aparta_.Repos.Payments
 {
-    public class InvoiceRepository
+    public class InvoiceRepository : IAsyncDisposable
     {
 
         private readonly ApartaPlusContext _context;
-        public InvoiceRepository(ApartaPlusContext context) { 
-            _context = context;
+        public InvoiceRepository(IDbContextFactory<ApartaPlusContext> dbContextFactory) { 
+            _context = dbContextFactory.CreateDbContext();
         }
 
         public async Task<List<Factura>> GenerateMonthlyInvoices()
@@ -110,6 +110,11 @@ namespace data_aparta_.Repos.Payments
             _context.SaveChanges();
 
             return invoice;
+        }
+
+        public ValueTask DisposeAsync()
+        {
+           return _context.DisposeAsync();
         }
     }
 }
