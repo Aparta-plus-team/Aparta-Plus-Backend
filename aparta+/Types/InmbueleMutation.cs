@@ -10,40 +10,40 @@ namespace aparta_.GraphQL
         // Crear un nuevo inmueble
         public async Task<Inmueble> CreateInmueble(
             string codigo,
-            DateTime fechaCreacion,
-            bool ocupacion,
+            bool? ocupacion, // Cambiado a nullable
             bool tieneParqueo,
             int numBanos,
             int numHabitaciones,
-            Guid? propiedadId,
+            Guid propiedadId, // Ahora es obligatorio
             Guid? contratoId,
             [Service] IInmuebleRepository inmuebleRepository)
         {
+            Console.WriteLine("Iniciando mutación CreateInmueble...");
+
+            // Validar propiedadId
+            if (propiedadId == Guid.Empty)
+            {
+                throw new GraphQLException("El campo 'propiedadId' es obligatorio y no puede estar vacío.");
+            }
+
             var inmueble = new Inmueble
             {
                 Inmuebleid = Guid.NewGuid(),
                 Codigo = codigo,
-                Fechacreacion = DateOnly.FromDateTime(fechaCreacion),
-                Ocupacion = ocupacion,
+                Fechacreacion = DateOnly.FromDateTime(DateTime.Now),
+                Ocupacion = ocupacion ?? false, // Asigna un valor por defecto si es null
                 Tieneparqueo = tieneParqueo,
                 Numbanos = numBanos,
                 Numhabitaciones = numHabitaciones,
-                Propiedadid = propiedadId,
+                Propiedadid = propiedadId, // Asignación obligatoria
                 Contratoid = contratoId
             };
 
-            // Validación opcional
-            if (contratoId.HasValue)
-            {
-                // Si contratoId se proporciona, asegúrate de que exista un contrato
-                var contrato = await inmuebleRepository.GetInmuebleByIdAsync(contratoId.Value);
-                if (contrato == null)
-                {
-                    throw new GraphQLException($"El contrato con ID {contratoId} no existe.");
-                }
-            }
+            Console.WriteLine($"Creando inmueble con ID: {inmueble.Inmuebleid}");
 
             await inmuebleRepository.AddInmuebleAsync(inmueble);
+
+            Console.WriteLine("Inmueble creado exitosamente.");
             return inmueble;
         }
 
@@ -55,7 +55,7 @@ namespace aparta_.GraphQL
             bool? tieneParqueo,
             int? numBanos,
             int? numHabitaciones,
-            Guid? propiedadId,
+            Guid propiedadId, // Ahora es obligatorio
             Guid? contratoId,
             [Service] IInmuebleRepository inmuebleRepository)
         {
@@ -66,13 +66,19 @@ namespace aparta_.GraphQL
                 throw new GraphQLException($"Inmueble con ID {inmuebleId} no encontrado.");
             }
 
+            // Validar propiedadId
+            if (propiedadId == Guid.Empty)
+            {
+                throw new GraphQLException("El campo 'propiedadId' es obligatorio y no puede estar vacío.");
+            }
+
             // Actualiza solo los campos proporcionados
             if (!string.IsNullOrEmpty(codigo)) inmueble.Codigo = codigo;
             if (ocupacion.HasValue) inmueble.Ocupacion = ocupacion.Value;
             if (tieneParqueo.HasValue) inmueble.Tieneparqueo = tieneParqueo.Value;
             if (numBanos.HasValue) inmueble.Numbanos = numBanos.Value;
             if (numHabitaciones.HasValue) inmueble.Numhabitaciones = numHabitaciones.Value;
-            if (propiedadId.HasValue) inmueble.Propiedadid = propiedadId.Value;
+            inmueble.Propiedadid = propiedadId; // Asignación obligatoria
             if (contratoId.HasValue)
             {
                 // Validación opcional: verificar si el contrato existe antes de actualizar

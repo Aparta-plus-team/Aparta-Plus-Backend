@@ -14,7 +14,7 @@ namespace aparta_.Types
             => new Book("C# in depth.", new Author("Jon Skeet"));
 
         [UseOffsetPaging]
-        [UseProjection]
+        [UseProjection] 
         [UseFiltering]
         [UseSorting]
         public static async Task<IQueryable<Factura>> GetFacturas(ApartaPlusContext dbContext) =>
@@ -62,17 +62,34 @@ namespace aparta_.Types
         public static async Task<List<ReporteMorosidadDto>> GetReporteMorosidadPorAnio(
             int anio,
             Guid userId,
+            Guid? propertyId,
             [Service] ReporteMorosidadRepository reporteMorosidadRepository)
         {
-            return await reporteMorosidadRepository.GetReporteMorosidadPorUsuarioYAnioAsync(userId ,anio);
+            return await reporteMorosidadRepository.GetReporteMorosidadPorUsuarioPropiedadYAnioAsync(userId, propertyId, anio);
         }
 
-        public static async Task<DashboardStatisticsDTO> GetDashboardStatistics(
+        public static  Task<DashboardStatisticsDTO> GetDashboardStatistics(
             Guid userId,
             [Service] DashboardStatisticsService dashboardService)
         {
-            return await dashboardService.GetDashboardStatisticsAsync(userId);
+            return  dashboardService.GetDashboardStatisticsAsync(userId);
         }
 
+        // Query para Reporte de Ventas Anual
+        public static  Task<List<ReporteVentasDto>> GetReporteVentasAsync(
+        [Service] ReporteVentasRepository repository,
+        Guid userId, 
+        int year)
+    {
+        return  repository.GetReporteVentasAnual(userId, year);
+    }
+
+        // Query para Ganancia por Inmueble
+        public static  Task<List<GananciaInmuebleDto>> GetGananciaPorInmueble(
+            Guid userId,
+            [Service] GananciaInmuebleRepository gananciaInmuebleRepository)
+        {
+            return  gananciaInmuebleRepository.GetGananciaPorInmueble(userId);
+        }
     }
 }
