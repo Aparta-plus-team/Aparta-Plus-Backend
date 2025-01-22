@@ -7,11 +7,11 @@ namespace aparta_.Types
     [MutationType]
     public class ReportesMutations
 {
-        public async Task<string> DescargarReportePagos([Service] ReportesRepository reportes)
+        public async Task<string> DescargarReportePagos([Service] ReportesRepository reportes, string propiedadId, int year)
         {
             try
             {
-                return await reportes.GenerateReport("a65e5bbe-0880-47bb-a560-e605c65fa78c", 2025);
+                return await reportes.GenerateReport(propiedadId, year);
             }catch(Exception e)
             {
                 throw new GraphQLException(e.Message);
@@ -19,11 +19,11 @@ namespace aparta_.Types
 
         }
 
-        public async Task<string> DescargarReporteIngresoMorosidad([Service] ReportesRepository reportes)
+        public async Task<string> DescargarReporteIngresoMorosidad([Service] ReportesRepository reportes, string year, string userId)
         {
             try
             {
-                return await reportes.GenerateReporteIngresosMorosidad("2025", "d4b88408-20e1-700a-9777-c4c0e50bfaf5");
+                return await reportes.GenerateReporteIngresosMorosidad(year, userId);
             }catch(Exception e)
             {
                 throw new GraphQLException(e.Message);

@@ -1,5 +1,7 @@
 ﻿using data_aparta_.Context;
+using data_aparta_.DTOs;
 using data_aparta_.Models;
+using data_aparta_.Repos.Utils;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -14,10 +16,12 @@ namespace data_aparta_.Repos.Reportes
     public class ReportesRepository : IAsyncDisposable
     {
         private readonly ApartaPlusContext _context;
+        private readonly S3Uploader _s3Uploader;
 
-        public ReportesRepository(IDbContextFactory<ApartaPlusContext> dbContextFactory)
+        public ReportesRepository(IDbContextFactory<ApartaPlusContext> dbContextFactory, S3Uploader s3)
         {
             _context = dbContextFactory.CreateDbContext();
+            _s3Uploader = s3;
         }
 
         public async Task<string> GenerateReport(string propiedadId, int year)
@@ -143,7 +147,9 @@ namespace data_aparta_.Repos.Reportes
                 });
             }).GeneratePdf(filePath);
 
-            return filePath; // Retorna la ruta del archivo generado
+            var uploadResponse = await _s3Uploader.UploadFileFromPathAsync(filePath, "report", propiedadId);
+
+            return uploadResponse.Url;
         }
 
 
@@ -316,7 +322,10 @@ namespace data_aparta_.Repos.Reportes
                 });
             }).GeneratePdf(filePath);
 
-            return filePath;
+          
+            var uploadResponse = await _s3Uploader.UploadFileFromPathAsync(filePath,"report",userId);
+
+            return uploadResponse.Url;
         }
 
 
