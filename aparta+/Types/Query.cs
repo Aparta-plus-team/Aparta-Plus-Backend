@@ -85,11 +85,11 @@ namespace aparta_.Types
         }
 
         // Query para Ganancia por Inmueble
-        public static Task<List<GananciaInmuebleDto>> GetGananciaPorInmueble(
+        public static Task<List<GananciaPropiedadDto>> GananciaPropiedads(
             Guid userId,
-            [Service] GananciaInmuebleRepository gananciaInmuebleRepository)
+            [Service] GananciaPropiedadRepository gananciaInmuebleRepository)
         {
-            return gananciaInmuebleRepository.GetGananciaPorInmueble(userId);
+            return gananciaInmuebleRepository.GetGananciaPorPropiedad(userId);
         }
 
         public static Task<List<InquilinoDeudaDto>> GetInquilinosConDeudas(
@@ -97,14 +97,14 @@ namespace aparta_.Types
         [Service] InquilinoDeudaRepository inquilinoRepository)
         {
             return inquilinoRepository.GetInquilinosConDeudasAsync(userId);
-            }
+        }
 
-            public static  Task<List<EstadisticaFinancieraDto>> GetEstadisticaFinanciera(
-    Guid userId,
-    [Service] EstadisticaFinancieraRepository estadisticaFinancieraRepository)
-{
-    return  estadisticaFinancieraRepository.GetEstadisticaFinancieraAsync(userId);
-}
+        public static Task<List<EstadisticaFinancieraDto>> GetEstadisticaFinanciera(
+Guid userId,
+[Service] EstadisticaFinancieraRepository estadisticaFinancieraRepository)
+        {
+            return estadisticaFinancieraRepository.GetEstadisticaFinancieraAsync(userId);
+        }
 
     }
 

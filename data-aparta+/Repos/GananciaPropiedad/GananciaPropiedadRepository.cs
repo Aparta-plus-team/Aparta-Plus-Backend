@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace data_aparta_.Repos
 {
-    public class GananciaInmuebleRepository : IAsyncDisposable
+    public class GananciaPropiedadRepository : IAsyncDisposable
     {
         private readonly IDbContextFactory<ApartaPlusContext> _contextFactory;
         private ApartaPlusContext? _context;
 
-        public GananciaInmuebleRepository(IDbContextFactory<ApartaPlusContext> contextFactory)
+        public GananciaPropiedadRepository(IDbContextFactory<ApartaPlusContext> contextFactory)
         {
             _contextFactory = contextFactory;
         }
@@ -30,7 +30,7 @@ namespace data_aparta_.Repos
             }
         }
 
-        public async Task<List<GananciaInmuebleDto>> GetGananciaPorInmueble(Guid userId)
+        public async Task<List<GananciaPropiedadDto>> GetGananciaPorPropiedad(Guid userId)
         {
             using var context = _contextFactory.CreateDbContext();
 
@@ -39,11 +39,11 @@ namespace data_aparta_.Repos
                 .ThenInclude(i => i.Propiedad)
                 .Where(f => f.Inmueble.Propiedad.Usuarioid == userId && // Filtra por UsuarioId
                             (f.Estado == "Pagado" || f.Estado == "Por Adelantado")) // Filtra por estados válidos
-                .GroupBy(f => new { f.Inmueble.Inmuebleid, f.Inmueble.Codigo })
-                .Select(g => new GananciaInmuebleDto
+                .GroupBy(f => new { f.Inmueble.Propiedad.Propiedadid, f.Inmueble.Propiedad.Nombre })
+                .Select(g => new GananciaPropiedadDto
                 {
-                    InmuebleId = g.Key.Inmuebleid,
-                    CodigoInmueble = g.Key.Codigo,
+                    PropiedadId = g.Key.Propiedadid,
+                    NombrePropiedad = g.Key.Nombre,
                     Ganancia = g.Sum(f => f.Monto ?? 0) // Calcula la suma solo de facturas válidas
                 })
                 .OrderByDescending(r => r.Ganancia)
