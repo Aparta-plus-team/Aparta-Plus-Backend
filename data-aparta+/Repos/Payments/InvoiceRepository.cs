@@ -48,7 +48,7 @@ namespace data_aparta_.Repos.Payments
                 {
                     Facturaid = Guid.NewGuid(),
                     Inmuebleid = property.Inmuebleid,
-                    Monto = property.Contrato.Precioalquiler,
+                    Monto = property.Contrato?.Precioalquiler ?? 0,
                     Fechapago = DateOnly.FromDateTime(DateTime.Now),
                     Estado = estado
                 };

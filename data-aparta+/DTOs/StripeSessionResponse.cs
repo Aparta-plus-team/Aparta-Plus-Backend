@@ -31,8 +31,6 @@ namespace data_aparta_.DTOs
     public class ManualPaymentRequest
     {
         public string InmuebleId { get; set; }
-        public decimal MontoRecibido { get; set; }
-        public string? Descripcion { get; set; }
     }
 
 

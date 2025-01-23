@@ -204,7 +204,7 @@ namespace data_aparta_.Repos.Payments
             // Verificar deudas
             var debts = await _context.Facturas
                 .Where(f => f.Inmuebleid == Guid.Parse(inmuebleId)
-                    && f.Estado == "No Pagado")
+                    && f.Estado == "No Pagado" || f.Estado == "Pendiente")
                 .ToListAsync();
 
             response.HasDebt = debts.Any();
@@ -243,16 +243,6 @@ namespace data_aparta_.Repos.Payments
                 };
             }
 
-            if (request.MontoRecibido != deudaTotal)
-            {
-                return new ManualPaymentResponse
-                {
-                    Success = false,
-                    DeudaTotal = deudaTotal,
-                    Message = $"El monto recibido ({request.MontoRecibido:C2}) no coincide con la deuda total ({deudaTotal:C2})"
-                };
-            }
-
             var inmueble = await _context.Inmuebles
                 .Include(i => i.Contrato)
                     .ThenInclude(c => c.Inquilino)
@@ -260,12 +250,12 @@ namespace data_aparta_.Repos.Payments
 
             var facturasPendientes = await _context.Facturas
                 .Where(f => f.Inmuebleid == Guid.Parse(request.InmuebleId) &&
-                       (f.Estado == "No Pagado" || f.Estado == "Pendiente" || f.Estado == "Atrasado"))
+                       (f.Estado == "No Pagado" || f.Estado == "Pendiente"))
                 .OrderBy(f => f.Fechapago)
                 .ToListAsync();
 
             // Si no hay facturas pendientes pero hay deuda, crear la factura del mes actual
-            if (!facturasPendientes.Any() && deudaTotal > 0)
+            if (!facturasPendientes.Any())
             {
                 var nuevaFactura = new Factura
                 {
@@ -274,7 +264,7 @@ namespace data_aparta_.Repos.Payments
                     Monto = deudaTotal,
                     Estado = "Pagado",
                     Fechapago = DateOnly.FromDateTime(DateTime.Now),
-                    Descripcion = request.Descripcion,
+                    Descripcion = "Pago presencial",
                     Inmueble = inmueble
                 };
 
@@ -287,7 +277,7 @@ namespace data_aparta_.Repos.Payments
                 foreach (var factura in facturasPendientes)
                 {
                     factura.Estado = "Pagado";
-                    factura.Descripcion = request.Descripcion;
+                    factura.Descripcion = "Pago presencial";
                 }
             }
 
@@ -388,7 +378,7 @@ namespace data_aparta_.Repos.Payments
 
         private async Task<decimal> CalculateMora(Contrato contract, string inmuebleId)
         {
-            var debts = await _context.Facturas.Where(f => f.Inmuebleid == Guid.Parse(inmuebleId) && f.Estado == "No Pagado").ToListAsync();
+            var debts = await _context.Facturas.Where(f => f.Inmuebleid == Guid.Parse(inmuebleId) && f.Estado == "No Pagado" || f.Estado == "Pendiente").ToListAsync();
             decimal debt = 0;
 
             foreach (var factura in debts)
