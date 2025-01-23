@@ -4,6 +4,7 @@ using data_aparta_.DTOs;
 using data_aparta_.Models;
 using HotChocolate.Data;
 using data_aparta_.Repos;
+using data_aparta_.Repos.Contracts;
 
 namespace aparta_.Types
 {
@@ -113,10 +114,16 @@ namespace aparta_.Types
             return morosidadPorPropiedadRepository.GetMorosidadPorUsuarioAsync(userId);
         }
 
-
-
-
+        public static async Task<PaymentStatusResponse> GetPaymentStatus([Service] IPaymentRepository _paymentRepository, string inmuebleId)
+        {
+            try
+            {
+                return await _paymentRepository.GetPaymentStatus(inmuebleId);
+            }
+            catch (Exception e)
+            {
+                throw new GraphQLException(e.Message);
+            }
+        }
     }
-
-
 }
