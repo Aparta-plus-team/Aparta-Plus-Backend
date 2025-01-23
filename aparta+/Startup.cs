@@ -119,6 +119,7 @@ namespace aparta_
             services.AddScoped<GananciaPropiedadRepository>();
             services.AddScoped<InquilinoDeudaRepository>();
             services.AddScoped<EstadisticaFinancieraRepository>();
+            services.AddScoped<MorosidadPorPropiedadRepository>();
 
             return services;
         }

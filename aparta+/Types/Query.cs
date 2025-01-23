@@ -100,11 +100,21 @@ namespace aparta_.Types
         }
 
         public static Task<List<EstadisticaFinancieraDto>> GetEstadisticaFinanciera(
-Guid userId,
-[Service] EstadisticaFinancieraRepository estadisticaFinancieraRepository)
+            Guid userId,
+        [Service] EstadisticaFinancieraRepository estadisticaFinancieraRepository)
         {
             return estadisticaFinancieraRepository.GetEstadisticaFinancieraAsync(userId);
         }
+
+        public static Task<List<MorosidadPorPropiedadDto>> GetMorosidadsInquilino(
+        Guid userId,
+        [Service] MorosidadPorPropiedadRepository morosidadPorPropiedadRepository)
+        {
+            return morosidadPorPropiedadRepository.GetMorosidadPorUsuarioAsync(userId);
+        }
+
+
+
 
     }
 
