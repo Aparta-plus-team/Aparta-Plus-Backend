@@ -13,5 +13,7 @@ namespace data_aparta_.Repos.Contracts
         Task<bool> ProcessPayment(string sessionId);
         Task<PaymentStatusResponse> GetPaymentStatus(string inmuebleId);
         Task<ManualPaymentResponse> ProcessManualPayment(ManualPaymentRequest request);
+        Task<PaymentStatusResponse> GetPaymentStatusByInquilino(string inquilinoId);
+        Task<ManualPaymentResponse> ProcessManualPaymentByInquilino(string inquilinoId);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,12 +21,14 @@ namespace data_aparta_.DTOs
         public decimal DebtAmount { get; set; }
         public bool WillHaveMora { get; set; }
         public decimal MoraAmount { get; set; }
+        public string InmuebleId { get; set; }
     }
     public class ManualPaymentResponse
     {
         public bool Success { get; set; }
         public decimal DeudaTotal { get; set; }
         public string Message { get; set; }
+        public string InmuebleId { get; set; }
     }
 
     public class ManualPaymentRequest
