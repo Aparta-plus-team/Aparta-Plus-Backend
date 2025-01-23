@@ -158,7 +158,7 @@ namespace data_aparta_.Repos.Propiedades
                 var newInput = new FileUploadInput
                 {
                     File = input.File,
-                    Type = "image" // o el tipo que corresponda
+                    Type = "property-image" // o el tipo que corresponda
                 };
 
                 var result = await _s3Uploader.UploadFileAsync(input);
@@ -172,6 +172,10 @@ namespace data_aparta_.Repos.Propiedades
                     Fechacreacion = DateOnly.FromDateTime(DateTime.UtcNow),
                     Estado = true
                 };
+
+                await _context!.Imagenespropiedades.AddAsync(img);
+                await _context.SaveChangesAsync();
+
 
                 return new FileUploadResponse
                 {

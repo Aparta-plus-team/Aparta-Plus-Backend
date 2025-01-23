@@ -153,7 +153,7 @@ namespace aparta_.Types
                 return await propertyRepository.UploadImages(new FileUploadInput
                 {
                     File = file,
-                    Type = "image",
+                    Type = "property-image",
                     PropertyId = propertyId
                 });
             }
